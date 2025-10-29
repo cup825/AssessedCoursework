@@ -2,7 +2,7 @@ public class Ticket implements Comparable<Ticket> {
     //field
     private final String name;
     private int count;//余票
-    private double price;
+    private final double price;
 
     //constructor
     Ticket() {//用不用写两个构造函数?

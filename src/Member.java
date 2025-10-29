@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 public class Member implements Comparable<Member> {
     //For each member, the office should know their first name, surname

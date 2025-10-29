@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainProgram {
@@ -12,7 +11,7 @@ public class MainProgram {
     //    你的程序应该从文件中读取已注册会员列表和可用票证列表。
 //    输入文件的内容应采用以下格式：第一行包含一个整数，表示已注册会员的数量，
 //    后面是会员信息（每个会员一行，包含其名字和姓氏）。
-    public static boolean loadList() {
+    public static void loadList() {
         try {
             Scanner s = new Scanner(new File("input_data.txt"));
 
@@ -35,10 +34,8 @@ public class MainProgram {
 
             }
 
-            return true;
         } catch (FileNotFoundException e) {
             System.out.println("The file can not find!");
-            return false;
         }
     }
 
