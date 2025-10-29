@@ -33,11 +33,11 @@ public class Ticket implements Comparable<Ticket> {
     @Override
     public String toString() {
         return String.format("The number of %s of ticket available is: %d, the price is: %.2f .",
-                getName(), getCount(), getPrice());
+                name, count, price);
     }
 
-    @Override //?需要干啥
+    @Override //比较票名
     public int compareTo(Ticket o) {
-        return 0;
+        return this.name.compareTo(o.name);
     }
 }
