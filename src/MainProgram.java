@@ -14,8 +14,9 @@ public class MainProgram {
     public static void loadList() {
         try {
             Scanner s = new Scanner(new File("input_data.txt"));
-
+            //s.nextLine();
             memberCount = s.nextInt();//第一行数字
+            s.nextLine();//到姓名那一行
             for (int i = 0; i < memberCount; i++) {
                 String line = s.nextLine();//读取会员名
                 String[] str = line.split(" ");
@@ -24,15 +25,22 @@ public class MainProgram {
             }
 
             showCount = s.nextInt();
+            s.nextLine();
             for (int i = 0; i < showCount; i++) {//一次循环读三行
-                Ticket tic = new Ticket(
-                        s.nextLine(),
-                        Integer.parseInt(s.nextLine()),
-                        Double.parseDouble(s.nextLine())
-                );
-                ticketList.add(tic);
+                try {
+                    Ticket tic = new Ticket(
+                            s.nextLine(),
+                            Integer.parseInt(s.nextLine()),
+                            Double.parseDouble(s.nextLine())
+                    );
+                    ticketList.add(tic);
+                } catch (NumberFormatException e) {
+                    System.out.println("转换int/double时失败");
+                }
+
 
             }
+            System.out.println("Please type your option and press Enter >");//读取文件后，再让用户输入
 
         } catch (FileNotFoundException e) {
             System.out.println("The file can not find!");
@@ -50,7 +58,6 @@ public class MainProgram {
                 b - Buy new tickets
                 c - Cancel tickets
                 ----------Enter 'f' to quit the program-----------
-                Please type your option and press Enter >
                 """);
     }
 
@@ -95,19 +102,31 @@ public class MainProgram {
 
     //    t- 在屏幕上显示所有演出的信息，包括剩余门票数量和每张门票的价格。
     public static void listShows() {
-        for (Ticket t : ticketList) {
+        System.out.println("_____________________________________________________________________________");
+        System.out.printf("%-50s|%-20s|%-20s %n", "SHOW NAME", "TICKETS AVAILABLE", "PRICE");
+        for (Ticket t : ticketList)
             System.out.println(t.toString());
-        }
-
+        System.out.println("______________________________________________________________________________");
     }
 
     //    m- 在屏幕上显示所有会员的信息，包括他们持有每种票的数量、每种票的总价以及所有票的总价。
     public static void listMembers() {
+        //System.out
+        for (Member m : memberList) {
+            System.out.println(m.toString());
+        }
 
     }
 
     //    b- 当注册会员购买指定数量的指定票证并添加到其帐户时，更新存储的数据。
     public static void buy() {
+        System.out.println("Please enter your full name>");
+        Scanner s = new Scanner(System.in);
+        String[] userName = s.nextLine().split(" ");
+//        for(Member m:memberList){
+//            //if(m.)
+//        }
+        //memberList.add()
 
     }
 

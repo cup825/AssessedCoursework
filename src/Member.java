@@ -1,3 +1,4 @@
+import java.util.HashMap;
 
 public class Member implements Comparable<Member> {
     //For each member, the office should know their first name, surname
@@ -10,8 +11,8 @@ public class Member implements Comparable<Member> {
     private final String firstName;
     private final String surname;
 
-    private String ticket;//?? 种类最多3种，但总数可以超过3张。
-    private String count;//??
+    //?? 种类最多3种，但总数可以超过3张。
+    private HashMap<String, Integer> purchaseTickets;//表演名字对应数量
     private final int maxOfType = 3;//??
 
     Member(String firstName, String surname) {
@@ -41,9 +42,9 @@ public class Member implements Comparable<Member> {
 
     @Override //比较姓氏，姓氏相同比较名字
     public int compareTo(Member o) {
-        if (!this.firstName.equals(o.firstName)) { //如果名不同，比较名即可
-            return this.firstName.compareTo(o.firstName);
-        } else //如果名相同，比较姓
+        if (!this.surname.equals(o.surname)) { //如果姓不同，比较姓即可
             return this.surname.compareTo(o.surname);
+        } else //如果姓相同，比较名
+            return this.firstName.compareTo(o.firstName);
     }
 }
