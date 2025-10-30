@@ -106,7 +106,7 @@ public class MainProgram {
         System.out.printf("%-50s|%-20s|%-20s %n", "SHOW NAME", "TICKETS AVAILABLE", "PRICE");
         for (Ticket t : ticketList)
             System.out.println(t.toString());
-        System.out.println("______________________________________________________________________________");
+        System.out.println("_____________________________________________________________________________");
     }
 
     //    m- 在屏幕上显示所有会员的信息，包括他们持有每种票的数量、每种票的总价以及所有票的总价。
