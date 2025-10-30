@@ -12,7 +12,7 @@ public class Member implements Comparable<Member> {
     private final String surname;
 
     //?? 种类最多3种，但总数可以超过3张。
-    private HashMap<String, Integer> purchaseTickets;//表演名字对应数量
+    public HashMap<String, Integer> purchaseTickets;//表演名字对应数量
     private final int maxOfType = 3;//??
 
     Member(String firstName, String surname) {

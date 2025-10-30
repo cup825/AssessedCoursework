@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class MainProgram {
-    public static SortedLinkedList<Member> memberList = new SortedLinkedList<>();
+    public static SortedLinkedList<Member> memberList = new SortedLinkedList<>();//成员列表
     public static SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>();//每个成员，票的列表
     public static int memberCount;
     public static int showCount;
@@ -25,7 +25,7 @@ public class MainProgram {
             }
 
             showCount = s.nextInt();
-            s.nextLine();
+            s.nextLine();//!
             for (int i = 0; i < showCount; i++) {//一次循环读三行
                 try {
                     Ticket tic = new Ticket(
@@ -111,21 +111,32 @@ public class MainProgram {
 
     //    m- 在屏幕上显示所有会员的信息，包括他们持有每种票的数量、每种票的总价以及所有票的总价。
     public static void listMembers() {
-        //System.out
         for (Member m : memberList) {
             System.out.println(m.toString());
         }
-
     }
 
     //    b- 当注册会员购买指定数量的指定票证并添加到其帐户时，更新存储的数据。
     public static void buy() {
-        System.out.println("Please enter your full name>");
+        System.out.println("Please enter your full name(split by space)>");
         Scanner s = new Scanner(System.in);
         String[] userName = s.nextLine().split(" ");
-//        for(Member m:memberList){
-//            //if(m.)
-//        }
+        Member mem = new Member(userName[0], userName[1]);
+        for (Member m : memberList) {
+            if (m.equals(mem)) { //如果存在，更新信息
+                System.out.println("""            
+                        1:Fascinating Aida
+                        2:Professor Elemental
+                        3:Spooky Men
+                        4:The Ukulele Orchestra of Great Britain
+                        5:Weird Al
+                        """);
+                System.out.println("Please input the number of show. ");
+                //s.nextInt()
+                //m.purchaseTickets(, )
+            } else
+                System.out.println("You did not register!");
+        }
         //memberList.add()
 
     }
