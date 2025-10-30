@@ -82,10 +82,10 @@ public class MainProgram {
                     flag = false;
                     break;
                 case 't':
-                    listShows();
+                    displayShows();
                     break;
                 case 'm':
-                    listMembers();
+                    displayMembers();
                     break;
                 case 'b':
                     buy();
@@ -101,7 +101,7 @@ public class MainProgram {
     }
 
     //    t- 在屏幕上显示所有演出的信息，包括剩余门票数量和每张门票的价格。
-    public static void listShows() {
+    public static void displayShows() {
         System.out.println("_____________________________________________________________________________");
         System.out.printf("%-50s|%-20s|%-20s %n", "SHOW NAME", "TICKETS AVAILABLE", "PRICE");
         for (Ticket t : ticketList)
@@ -110,36 +110,40 @@ public class MainProgram {
     }
 
     //    m- 在屏幕上显示所有会员的信息，包括他们持有每种票的数量、每种票的总价以及所有票的总价。
-    public static void listMembers() {
+    public static void displayMembers() {
         for (Member m : memberList) {
             System.out.println(m.toString());
         }
     }
 
     //    b- 当注册会员购买指定数量的指定票证并添加到其帐户时，更新存储的数据。
+    //需要修改的数据如下:
+    //Member类 map<String, Integer>，purchaseTickets，根据用户输入
+    //ticketList里的某项Ticket
+    //步骤如下：
     public static void buy() {
         System.out.println("Please enter your full name(split by space)>");
         Scanner s = new Scanner(System.in);
         String[] userName = s.nextLine().split(" ");
-        Member mem = new Member(userName[0], userName[1]);
-        for (Member m : memberList) {
-            if (m.equals(mem)) { //如果存在，更新信息
-                System.out.println("""            
-                        1:Fascinating Aida
-                        2:Professor Elemental
-                        3:Spooky Men
-                        4:The Ukulele Orchestra of Great Britain
-                        5:Weird Al
-                        """);
-                System.out.println("Please input the number of show. ");
-                //s.nextInt()
-                //m.purchaseTickets(, )
-            } else
-                System.out.println("You did not register!");
+        try {
+            Member mem = new Member(userName[0], userName[1]);
+        } catch (Exception e) {
+            System.out.println("You did not register!");
+            return; //需要重新操作
         }
-        //memberList.add()
+
+        int i = 0;
+        for (Ticket t : ticketList) {//向用户展示演出名字
+            System.out.println(i + ":" + t.getName());
+            i++;
+        }
+
+//        System.out.println("Please input the number of show. ");
+//        int num = s.nextInt();//演出编号，也是ticketList所对应的序号
+//        ticketList.get(i).getCount();
 
     }
+
 
     //    c- 当注册会员取消指定数量的指定票证并将其从其帐户中删除时，更新存储的数据。
     public static void cancel() {
