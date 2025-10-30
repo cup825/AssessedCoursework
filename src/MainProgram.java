@@ -50,15 +50,14 @@ public class MainProgram {
 
 
     public static void printMenu() {
-        System.out.println("""
-                ┌──────── Show & Member Management Menu ────────┐
+        System.out.print("""
+                ╭──────── Show & Member Management Menu ────────╮
                 │ t: List all shows' messages                   │
                 │ m: List all members' messages                 │
                 │ b: Buy new tickets                            │
                 │ c: Cancel tickets                             │
-                └──────── Enter 'f' to quit the program ────────┘
-                Please type your option and press Enter >
-                """);
+                ╰──────── Enter 'f' to quit the program ────────╯
+                Please type your option and press Enter >""");
     }
 
     public static void acceptOption() {
@@ -104,7 +103,7 @@ public class MainProgram {
     //    t- 在屏幕上显示所有演出的信息，包括剩余门票数量和每张门票的价格。
     public static void displayShows() {
         System.out.println("_____________________________________________________________________________");
-        System.out.printf("%-50s|%-20s|%-20s %n", "SHOW NAME", "TICKETS AVAILABLE", "PRICE");
+        System.out.printf("%-50s│%-20s│%-20s %n", "SHOW NAME", "TICKETS AVAILABLE", "PRICE");
         for (Ticket t : ticketList)
             System.out.println(t.toString());
         System.out.println("_____________________________________________________________________________\n");
@@ -115,7 +114,6 @@ public class MainProgram {
         for (Member m : memberList) {
             System.out.println(m.toString());
         }
-        System.out.println();//空行
     }
 
     //    b- 当注册会员购买指定数量的指定票证并添加到其帐户时，更新存储的数据。
