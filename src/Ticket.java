@@ -32,7 +32,7 @@ public class Ticket implements Comparable<Ticket> {
 
     @Override
     public String toString() {
-        return String.format("%-50s|%-20d|%-20.2f", name, count, price);
+        return String.format("%-50s|%-20d|%5.2f", name, count, price);
     }
 
     @Override //比较票名
