@@ -40,7 +40,6 @@ public class MainProgram {
 
 
             }
-            System.out.println("Please type your option and press Enter >");//读取文件后，再让用户输入
 
         } catch (FileNotFoundException e) {
             System.out.println("The file can not find!");
@@ -52,12 +51,13 @@ public class MainProgram {
 
     public static void printMenu() {
         System.out.println("""
-                -----------Show & Member Management Menu----------
-                t - List all shows' messages
-                m - List all members' messages
-                b - Buy new tickets
-                c - Cancel tickets
-                ----------Enter 'f' to quit the program-----------
+                ┌──────── Show & Member Management Menu ────────┐
+                │ t: List all shows' messages                   │
+                │ m: List all members' messages                 │
+                │ b: Buy new tickets                            │
+                │ c: Cancel tickets                             │
+                └──────── Enter 'f' to quit the program ────────┘
+                Please type your option and press Enter >
                 """);
     }
 
@@ -66,6 +66,7 @@ public class MainProgram {
         loadList();
         boolean flag = true;
         while (flag) {
+            printMenu();
             String line = input.nextLine();
             if (line.isEmpty()) {//check empty
                 System.out.println("Input can not be empty!");
@@ -106,7 +107,7 @@ public class MainProgram {
         System.out.printf("%-50s|%-20s|%-20s %n", "SHOW NAME", "TICKETS AVAILABLE", "PRICE");
         for (Ticket t : ticketList)
             System.out.println(t.toString());
-        System.out.println("_____________________________________________________________________________");
+        System.out.println("_____________________________________________________________________________\n");
     }
 
     //    m- 在屏幕上显示所有会员的信息，包括他们持有每种票的数量、每种票的总价以及所有票的总价。
@@ -114,6 +115,7 @@ public class MainProgram {
         for (Member m : memberList) {
             System.out.println(m.toString());
         }
+        System.out.println();//空行
     }
 
     //    b- 当注册会员购买指定数量的指定票证并添加到其帐户时，更新存储的数据。
@@ -125,11 +127,19 @@ public class MainProgram {
         System.out.println("Please enter your full name(split by space)>");
         Scanner s = new Scanner(System.in);
         String[] userName = s.nextLine().split(" ");
+
         try {
             Member mem = new Member(userName[0], userName[1]);
         } catch (Exception e) {
-            System.out.println("You did not register!");
+            System.out.println("Input invalid format name!");
             return; //需要重新操作
+        }
+
+
+        //检查名字是否存在, 不存在则return
+        if (!isMemberExist(userName[0], userName[1])) {
+            System.out.println("Name is not exist!");
+            return;
         }
 
         int i = 0;
@@ -145,6 +155,15 @@ public class MainProgram {
     }
 
 
+    public static boolean isMemberExist(String fName, String lName) {
+        for (Member m : MainProgram.memberList) {
+            if (fName.equals(m.getFirstName()) && lName.equals(m.getSurname()))
+                return true;
+        }
+        return false;
+    }
+
+
     //    c- 当注册会员取消指定数量的指定票证并将其从其帐户中删除时，更新存储的数据。
     public static void cancel() {
 
@@ -152,7 +171,7 @@ public class MainProgram {
 
 
     public static void main(String[] args) {
-        printMenu();
+        //printMenu();
         acceptOption();
 
 

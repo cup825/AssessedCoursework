@@ -16,16 +16,9 @@ public class Member implements Comparable<Member> {
     private final int maxOfType = 3;//??
 
     Member(String firstName, String surname) {
-        for (Member m : MainProgram.memberList) {
-            if (m.firstName.equals(firstName) && m.surname.equals(surname)) { //如果名字存在，再初始化Member对象
-                this.firstName = firstName;
-                this.surname = surname;
-                break;
-            }
-        }
-        throw new RuntimeException(); //如果名字不存在，抛出异常
+        this.firstName = firstName;
+        this.surname = surname;
     }
-
 
     //method
     public String getFirstName() {
@@ -54,4 +47,7 @@ public class Member implements Comparable<Member> {
         } else //如果姓相同，比较名
             return this.firstName.compareTo(o.firstName);
     }
+
+
+
 }
