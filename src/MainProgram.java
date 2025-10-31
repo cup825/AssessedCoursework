@@ -47,8 +47,6 @@ public class MainProgram {
         }
     }
 
-    //    f- 完成程序的运行。
-
 
     public static void printMenu() {
         System.out.print("""
@@ -78,8 +76,8 @@ public class MainProgram {
             }
             char ch = line.charAt(0);
             switch (ch) {
-                case 'f':
-                    System.out.println("You have exited.");
+                case 'f':  //f- 完成程序的运行。
+                    System.out.println("You have exited the program.");
                     flag = false;
                     break;
                 case 't':
@@ -134,7 +132,6 @@ public class MainProgram {
             return; //需要重新操作
         }
 
-
         //检查名字是否存在, 不存在则return
         if (!isMemberExist(userName[0], userName[1])) {
             System.out.println("Name is not exist!");
@@ -165,9 +162,8 @@ public class MainProgram {
             t.updateCount(-purchaseCount);//负数
             System.out.println("Purchase successfully.");
         } catch (RuntimeException e) { //捕捉该方法异常，防止票不足还售卖
-            System.out.println("Not enough tickets! Available: " + t.getCount());
+            System.out.println("Not enough tickets! Only " + t.getCount()+" left.");
         }
-
 
     }
 
@@ -179,7 +175,6 @@ public class MainProgram {
         }
         return false;
     }
-
 
     //    c- 当注册会员取消指定数量的指定票证并将其从其帐户中删除时，更新存储的数据。
     public static void cancel() {
