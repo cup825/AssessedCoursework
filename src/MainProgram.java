@@ -163,8 +163,9 @@ public class MainProgram {
         int purchaseCount = s.nextInt();
         try {
             t.updateCount(-purchaseCount);//负数
+            System.out.println("Purchase successfully.");
         } catch (RuntimeException e) { //捕捉该方法异常，防止票不足还售卖
-            System.out.println("The number of available tickets for the show is: " + t.getCount());
+            System.out.println("Not enough tickets! Available: " + t.getCount());
         }
 
 
