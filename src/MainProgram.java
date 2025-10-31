@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MainProgram {
@@ -122,7 +123,7 @@ public class MainProgram {
     //ticketList里的某项Ticket
     //步骤如下：
     public static void buy() {
-        System.out.println("Please enter your full name(split by space)>");
+        System.out.print("Please enter your full name(split by space)>");
         Scanner s = new Scanner(System.in);
         String[] userName = s.nextLine().split(" ");
 
@@ -146,9 +147,26 @@ public class MainProgram {
             i++;
         }
 
-//        System.out.println("Please input the number of show. ");
-//        int num = s.nextInt();//演出编号，也是ticketList所对应的序号
-//        ticketList.get(i).getCount();
+        int sequence; //演出的序号，也是ticketList所对应的序号
+        Ticket t = null; //存用户选中的票的实例 不初始化不让用方法？？
+        System.out.println("Please input the number of show >");
+        try {
+            sequence = s.nextInt(); //用不用nextLine？
+            t = ticketList.get(sequence);
+        } catch (InputMismatchException e) { //异常1-输入非数字
+            System.out.println("Please input valid number!");
+        } catch (RuntimeException e) { //异常2-输入超出限购种类 待改正
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("Please input the count of tickets >");
+        int purchaseCount = s.nextInt();
+        try {
+            t.updateCount(-purchaseCount);//负数
+        } catch (RuntimeException e) { //捕捉该方法异常，防止票不足还售卖
+            System.out.println("The number of available tickets for the show is: " + t.getCount());
+        }
+
 
     }
 

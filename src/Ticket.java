@@ -30,13 +30,6 @@ public class Ticket implements Comparable<Ticket> {
         return price;
     }
 
-    public boolean updateCount(int i) { //可正可负 购买-1，退票+1
-        if (count + i < 0)
-            throw new RuntimeException(); //当余票为负数时抛出异常
-        count = count + i; //没异常时才更新
-        return true;
-    }
-
     @Override
     public String toString() {
         return String.format("%-50s│%-20d│%5.2f", name, count, price);
@@ -45,5 +38,12 @@ public class Ticket implements Comparable<Ticket> {
     @Override //比较票名
     public int compareTo(Ticket o) {
         return this.name.compareTo(o.name);
+    }
+
+    public boolean updateCount(int i) { //可正可负 购买-1，退票+1
+        if (count + i < 0)
+            throw new RuntimeException(); //当余票为负数时抛出异常
+        count = count + i; //没异常时才更新
+        return true;
     }
 }
