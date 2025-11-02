@@ -53,12 +53,12 @@ public class Member implements Comparable<Member> {
     }
 
     public void purchase(String name, int count) {
-        if (!purchaseRecords.containsKey(name)) //首次买票
+        if (!purchaseRecords.containsKey(name)) //首次购买该种
         {
             if (purchaseRecords.size() == 3) //限制购买种类
                 throw new PurchaseLimitException();
             purchaseRecords.put(name, count);
-        } else { //非首次买票
+        } else { //非首次购买该种
             purchaseRecords.put(name, purchaseRecords.get(name) + count);//根据演出名查找hashmap对应数量，再做更新
         }
 

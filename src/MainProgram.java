@@ -204,7 +204,6 @@ public class MainProgram {
 
     }
 
-
     //    public static boolean isMemberExist(String fName, String lName) {
 //        for (Member m : MainProgram.memberList) {
 //            if (fName.equals(m.getFirstName()) && lName.equals(m.getSurname()))
@@ -212,7 +211,7 @@ public class MainProgram {
 //        }
 //        return false;
 //    }
-    public static Member isMemberExist(String fName, String lName) {
+    public static Member isMemberExist(String fName, String lName) { //原来写的布尔值，思考后改为Member
         for (Member m : MainProgram.memberList) {
             if (fName.equals(m.getFirstName()) && lName.equals(m.getSurname()))
                 return m;
