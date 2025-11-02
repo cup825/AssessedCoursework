@@ -148,9 +148,9 @@ public class MainProgram {
 //        }
 
 
-        int i = 0;
+        int i = 1;
         for (Ticket t : ticketList) {//向用户展示演出名字
-            System.out.println(i + 1 + ":" + t.getName()); //这里显示要i+1，后面要再-1
+            System.out.println(i + ":" + t.getName()); //这里显示要i+1，后面要再-1
             i++;
         }
 

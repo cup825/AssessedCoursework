@@ -35,13 +35,14 @@ public class Member implements Comparable<Member> {
         StringBuilder sMap = new StringBuilder(); //拼接字符串
         if (purchaseRecords.isEmpty())
             sMap.append("(No purchases yet)"); //暂无购买记录
-        else { //有买票记录时
+        else { //有买票记录时 需要查询票的列表里对应单价，再*value
             purchaseRecords.forEach((key, value) -> { //lambda表达式
                 //map=map+key+":"+value;
+
                 sMap.append(key).append(":").append(value).append(" ");
             });
         }
-        return String.format("%-15s│%-50s", firstName + " " + surname, sMap.toString());
+        return String.format("%-15s│%-20s", firstName + " " + surname, sMap.toString());
     }
 
     @Override //比较姓氏，姓氏相同比较名字
