@@ -74,7 +74,7 @@ public class MainProgram {
                 System.out.println("Please type valid option!");
                 continue;
             }
-            char ch = line.charAt(0);
+            char ch = line.charAt(0); //*提取字符串第一位字符 ？是否有必要
             switch (ch) {
                 case 'f':  //f- 完成程序的运行。
                     System.out.println("You have exited the program.");
@@ -110,70 +110,114 @@ public class MainProgram {
 
     //    m- 在屏幕上显示所有会员的信息，包括他们持有每种票的数量、每种票的总价以及所有票的总价。
     public static void displayMembers() {
+        System.out.println("_____________________________________________________________________________");
+        System.out.printf("%-15s│%-50s %n", "MEMBER NAME", "PURCHASE RECORD");
         for (Member m : memberList) {
             System.out.println(m.toString());
         }
+        System.out.println("_____________________________________________________________________________");
     }
 
     //    b- 当注册会员购买指定数量的指定票证并添加到其帐户时，更新存储的数据。
     //需要修改的数据如下:
-    //Member类 map<String, Integer>，purchaseTickets，根据用户输入
+    //Member类 map<String, Integer>，purchaseRecords，根据用户输入
     //ticketList里的某项Ticket
     //步骤如下：
     public static void buy() {
         System.out.print("Please enter your full name(split by space)>");
         Scanner s = new Scanner(System.in);
-        String[] userName = s.nextLine().split(" ");
-
+        //Member mem; //*到底是更新会员，还是会员列表。但是更新会员就会更新列表吧？
+        Member mem = null;//这里对应list里面的member
         try {
-            Member mem = new Member(userName[0], userName[1]);
-        } catch (Exception e) {
+            String[] userName = s.nextLine().split(" ");
+            mem = isMemberExist(userName[0], userName[1]); //会保存结果，对应上去
+            if (mem == null) {//检查名字是否存在, 不存在则return
+                System.out.println("Name is not exist!");
+                return;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Input invalid format name!");
-            return; //需要重新操作
+            return;//这里异常怎么还要手动return
         }
 
-        //检查名字是否存在, 不存在则return
-        if (!isMemberExist(userName[0], userName[1])) {
-            System.out.println("Name is not exist!");
-            return;
-        }
+//        try {
+//            Member mem = new Member(userName[0], userName[1]);//根本不需要对象，注释掉
+//        } catch (Exception e) {
+//            System.out.println("Input invalid format name!");
+//            return; //需要重新操作
+//        }
+
 
         int i = 0;
         for (Ticket t : ticketList) {//向用户展示演出名字
-            System.out.println(i + ":" + t.getName());
+            System.out.println(i + 1 + ":" + t.getName()); //这里显示要i+1，后面要再-1
             i++;
         }
 
         int sequence; //演出的序号，也是ticketList所对应的序号
-        Ticket t = null; //存用户选中的票的实例 不初始化不让用方法？？
-        System.out.println("Please input the number of show >");
+        Ticket t = null; //！存用户选中的票的实例 不初始化不让用方法？？
+        System.out.println("Please input the sequence (number) of show >");
+
         try {
-            sequence = s.nextInt(); //用不用nextLine？
-            t = ticketList.get(sequence);
+            sequence = s.nextInt() - 1; //这里对应上面i+1，再减去
+            //如果输入的不是序号范围，需重新输入
+            if (sequence < 0 || sequence > ticketList.size())
+                System.out.println("Please input valid number!"); //*这里可能要写个方法，方便一些。经常要限定为正数
+            t = ticketList.get(sequence); //t为ticketList序号所对应的对象
         } catch (InputMismatchException e) { //异常1-输入非数字
             System.out.println("Please input valid number!");
-        } catch (RuntimeException e) { //异常2-输入超出限购种类 待改正
-            throw new RuntimeException(e);
+            return;
         }
 
-        System.out.println("Please input the count of tickets >");
-        int purchaseCount = s.nextInt();
+        System.out.println("Please input the count of tickets you want to purchase >");
         try {
-            t.updateCount(-purchaseCount);//负数
-            System.out.println("Purchase successfully.");
-        } catch (RuntimeException e) { //捕捉该方法异常，防止票不足还售卖
-            System.out.println("Not enough tickets! Only " + t.getCount()+" left.");
+            int purchaseCount = s.nextInt();
+            if (purchaseCount <= 0) { //禁止输入非正数
+                System.out.println("Please enter a positive number!");
+                return;
+            }
+            //①更新库存(ticket)信息 传入值为负数
+            t.updateCount(-purchaseCount);//这里的t是tickList里的对象，所以同步更新了
+
+            //②更新会员信息的hashmap 存名字，和对应票数量
+            mem.purchase(t.getName(), purchaseCount);
+//            if (!mem.purchaseRecords.containsKey(t.getName())) //首次买票
+//            {
+//                mem.purchaseRecords.put(t.getName(), purchaseCount); //*为什么没有更新？ 更新mem，MemberList没有同步更新！
+//                //System.out.println("首次买该演出票：" + mem.purchaseRecords);
+//            } else { //非首次买票
+//                mem.purchaseRecords.put(t.getName(),
+//                        mem.purchaseRecords.get(t.getName()) + purchaseCount);//根据演出名查找hashmap对应数量，再做更新
+//                //System.out.println("非首次买该演出票" + mem.purchaseRecords);
+//            }
+            System.out.println("Purchase successfully!");
+        } catch (InputMismatchException e) {
+            System.out.println("Please input valid number!");
+            return;
+        } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖
+            System.out.println("Not enough tickets! Only " + t.getCount() + " left.");
+            return;
+        } catch (PurchaseLimitException e) {
+            System.out.println("You can not buy more than 3 types of tickets!");
+            return;
         }
 
     }
 
 
-    public static boolean isMemberExist(String fName, String lName) {
+    //    public static boolean isMemberExist(String fName, String lName) {
+//        for (Member m : MainProgram.memberList) {
+//            if (fName.equals(m.getFirstName()) && lName.equals(m.getSurname()))
+//                return true;
+//        }
+//        return false;
+//    }
+    public static Member isMemberExist(String fName, String lName) {
         for (Member m : MainProgram.memberList) {
             if (fName.equals(m.getFirstName()) && lName.equals(m.getSurname()))
-                return true;
+                return m;
         }
-        return false;
+        return null;
     }
 
     //    c- 当注册会员取消指定数量的指定票证并将其从其帐户中删除时，更新存储的数据。

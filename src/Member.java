@@ -12,8 +12,8 @@ public class Member implements Comparable<Member> {
     private final String surname;
 
     //?? 种类最多3种，但总数可以超过3张。
-    public HashMap<String, Integer> purchaseTickets;//表演名字对应数量
-    private final int maxOfType = 3;//??
+    public HashMap<String, Integer> purchaseRecords = new HashMap<>();//表演名字对应数量。在这初始化。
+    //private final int maxOfType = 3;//??
 
     Member(String firstName, String surname) {
         this.firstName = firstName;
@@ -31,14 +31,18 @@ public class Member implements Comparable<Member> {
 
     @Override
     public String toString() {
-        return String.format("%s %s", firstName, surname);
-
+        //String map;
+        StringBuilder sMap = new StringBuilder(); //拼接字符串
+        if (purchaseRecords.isEmpty())
+            sMap.append("(No purchases yet)"); //暂无购买记录
+        else { //有买票记录时
+            purchaseRecords.forEach((key, value) -> { //lambda表达式
+                //map=map+key+":"+value;
+                sMap.append(key).append(":").append(value).append(" ");
+            });
+        }
+        return String.format("%-15s│%-50s", firstName + " " + surname, sMap.toString());
     }
-
-//    //比较两个
-//    public boolean equals(Member m2) {
-//        return (this.firstName.equals(m2.surname) && this.surname.equals(m2.surname));
-//    }
 
     @Override //比较姓氏，姓氏相同比较名字
     public int compareTo(Member o) {
@@ -48,6 +52,16 @@ public class Member implements Comparable<Member> {
             return this.firstName.compareTo(o.firstName);
     }
 
+    public void purchase(String name, int count) {
+        if (!purchaseRecords.containsKey(name)) //首次买票
+        {
+            if (purchaseRecords.size() == 3) //限制购买种类
+                throw new PurchaseLimitException();
+            purchaseRecords.put(name, count);
+        } else { //非首次买票
+            purchaseRecords.put(name, purchaseRecords.get(name) + count);//根据演出名查找hashmap对应数量，再做更新
+        }
 
+    }
 
 }
