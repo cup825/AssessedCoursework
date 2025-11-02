@@ -1,7 +1,8 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.time.*;
 
 public class MainProgram {
     public static SortedLinkedList<Member> memberList = new SortedLinkedList<>();//成员列表
@@ -47,7 +48,6 @@ public class MainProgram {
         }
     }
 
-
     public static void printMenu() {
         System.out.print("""
                 ╭──────── Show & Member Management Menu ────────╮
@@ -87,7 +87,11 @@ public class MainProgram {
                     displayMembers();
                     break;
                 case 'b':
-                    buy();
+                    try {
+                        buy();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case 'c':
                     cancel();
@@ -123,7 +127,7 @@ public class MainProgram {
     //Member类 map<String, Integer>，purchaseRecords，根据用户输入
     //ticketList里的某项Ticket
     //步骤如下：
-    public static void buy() {
+    public static void buy() throws IOException {
         System.out.print("Please enter your full name(split by space)>");
         Scanner s = new Scanner(System.in);
         //Member mem; //*到底是更新会员，还是会员列表。但是更新会员就会更新列表吧？
@@ -194,11 +198,44 @@ public class MainProgram {
         } catch (InputMismatchException e) {
             System.out.println("Please input valid number!");
             return;
-        } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖
-            System.out.println("Not enough tickets! Only " + t.getCount() + " left.");
+        } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信
+            System.out.println("Purchase failed! Please check your letters.");
+            PrintWriter outFile = new PrintWriter(new FileWriter("letter.txt", true));
+            outFile.printf("""
+                    %s
+                    Dear %s,
+                    
+                    I’m sorry, but we couldn’t complete your ticket purchase.
+                    There are not enough tickets available for '%s' — only %d left.
+                    
+                    Please try again later or choose another option.
+                    
+                    Kind regards,
+                    NEAT Ticket Office
+                    
+                    """, getTime(), mem.getName(), t.getName(), t.getCount());
+            outFile.close();
             return;
         } catch (PurchaseLimitException e) {
-            System.out.println("You can not buy more than 3 types of tickets!");
+            System.out.println("Purchase failed! Please check your letters.");
+            PrintWriter outFile = new PrintWriter(new FileWriter("letter.txt", true));
+            outFile.printf("""
+                    %s
+                    Dear %s,
+                    
+                    I’m sorry, but we couldn’t complete your ticket purchase.
+                    You cannot buy more than three different types of tickets.
+                    
+                    However, you can still buy more tickets for the shows you already have,
+                    or cancel one of your existing ticket types before adding a new one.
+                    
+                    Please try again later or choose another option.
+                    
+                    Kind regards,
+                    NEAT Ticket Office
+                    
+                    """, getTime(), mem.getName());
+            outFile.close();
             return;
         }
 
@@ -217,6 +254,17 @@ public class MainProgram {
                 return m;
         }
         return null;
+    }
+
+    public static void writeLetter(String name) throws FileNotFoundException {
+
+
+    }
+
+    public static String getTime() {
+        LocalDateTime current = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return current.format(formatter);
     }
 
     //    c- 当注册会员取消指定数量的指定票证并将其从其帐户中删除时，更新存储的数据。

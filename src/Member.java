@@ -29,6 +29,10 @@ public class Member implements Comparable<Member> {
         return surname;
     }
 
+    public String getName() {
+        return firstName + " " + surname;
+    }
+
     @Override
     public String toString() {
         //String map;
