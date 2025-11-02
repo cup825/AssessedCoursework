@@ -87,11 +87,7 @@ public class MainProgram {
                     displayMembers();
                     break;
                 case 'b':
-                    try {
-                        buy();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    buy();
                     break;
                 case 'c':
                     cancel();
@@ -127,7 +123,7 @@ public class MainProgram {
     //Member类 map<String, Integer>，purchaseRecords，根据用户输入
     //ticketList里的某项Ticket
     //步骤如下：
-    public static void buy() throws IOException {
+    public static void buy() {
         System.out.print("Please enter your full name(split by space)>");
         Scanner s = new Scanner(System.in);
         //Member mem; //*到底是更新会员，还是会员列表。但是更新会员就会更新列表吧？
@@ -200,7 +196,12 @@ public class MainProgram {
             return;
         } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信
             System.out.println("Purchase failed! Please check your letters.");
-            PrintWriter outFile = new PrintWriter(new FileWriter("letter.txt", true));
+            PrintWriter outFile = null;
+            try {
+                outFile = new PrintWriter(new FileWriter("letter.txt", true));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             outFile.printf("""
                     %s
                     Dear %s,
@@ -218,7 +219,12 @@ public class MainProgram {
             return;
         } catch (PurchaseLimitException e) {
             System.out.println("Purchase failed! Please check your letters.");
-            PrintWriter outFile = new PrintWriter(new FileWriter("letter.txt", true));
+            PrintWriter outFile = null;
+            try {
+                outFile = new PrintWriter(new FileWriter("letter.txt", true));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             outFile.printf("""
                     %s
                     Dear %s,
