@@ -1,46 +1,54 @@
-2025-11-02 21:31:10
-Dear Mark Smith,
+2025-11-04 22:24:22
+Dear Mark Jones,
 
 I’m sorry, but we couldn’t complete your ticket purchase.
-There are not enough tickets available for 'Spooky Men' — only 2 left.
+Unfortunately, 'dww' is not an available ticket at NEAT.
 
-Please try again later or choose another option.
+Please check shows' messages and try again.
 
 Kind regards,
 NEAT Ticket Office
 
-2025-11-02 21:31:51
-Dear Mark Smith,
-
-I’m sorry, but we couldn’t complete your ticket purchase.
-You cannot buy more than three different types of tickets.
-
-However, you can still buy more tickets for the shows you already have,
-or cancel one of your existing ticket types before adding a new one.
-
-Please try again later or choose another option.
-
-Kind regards,
-NEAT Ticket Office
-
-2025-11-02 21:32:06
-Dear Mark Smith,
-
-I’m sorry, but we couldn’t complete your ticket purchase.
-There are not enough tickets available for 'Fascinating Aida' — only 4 left.
-
-Please try again later or choose another option.
-
-Kind regards,
-NEAT Ticket Office
-
-2025-11-04 16:18:03
+2025-11-04 22:25:37
 Dear Mark Jones,
 
 I’m sorry, but we couldn’t complete your ticket purchase.
 There are not enough tickets available for 'Spooky Men' — only 2 left.
 
 Please try again later or choose another option.
+
+Kind regards,
+NEAT Ticket Office
+
+2025-11-04 22:57:55
+Dear Ted Smith,
+
+I’m sorry, but we couldn’t complete your ticket purchase.
+Unfortunately, 'd' is not an available ticket at NEAT.
+
+Please check shows' messages and try again.
+
+Kind regards,
+NEAT Ticket Office
+
+2025-11-04 23:03:19
+Dear Mark Jones,
+
+I’m sorry, but we couldn’t complete your ticket purchase.
+Unfortunately, 's' is not an available ticket at NEAT.
+
+Please check shows' messages and try again.
+
+Kind regards,
+NEAT Ticket Office
+
+2025-11-04 23:10:26
+Dear Mark Jones,
+
+I’m sorry, but we couldn’t complete your ticket purchase.
+Unfortunately, 'ee' is not an available ticket at NEAT.
+
+Please check shows' messages and try again.
 
 Kind regards,
 NEAT Ticket Office

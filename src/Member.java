@@ -103,12 +103,23 @@ public class Member implements Comparable<Member> {
     }
 
     public void purchase(String name, int count) {
+        if (count == 0) return;
         if (!purchaseRecords.containsKey(name)) //首次购买该种
         {
+            if (count < 0)//没有购买还取消了
+            {
+                System.out.println("You have not purchased this type of ticket.");
+                return;
+            }
             if (purchaseRecords.size() == 3) //限制购买种类
                 throw new PurchaseLimitException();
             purchaseRecords.put(name, count);
         } else { //非首次购买该种
+            if (count < 0 && -count > purchaseRecords.get(name)) {//如果取消 且 超过已有数量
+                System.out.println("You have not enough tickets.");
+                return;
+            }
+            //这一句，如果count设置为负数，也可以作为取消的操作
             purchaseRecords.put(name, purchaseRecords.get(name) + count);//根据演出名查找hashmap对应数量，再做更新
         }
 

@@ -151,6 +151,12 @@ public class MainProgram {
         return null;
     }
 
+    public static String getTime() {
+        LocalDateTime current = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return current.format(formatter);
+    }
+
     //    b- 当注册会员购买指定数量的指定票证并添加到其帐户时，更新存储的数据。
     //需要修改的数据如下:
     //Member类 map<String, Integer>，purchaseRecords，根据用户输入
@@ -181,10 +187,29 @@ public class MainProgram {
             System.out.print("Please enter the show name you want to buy >");
             String show = s.nextLine();
             tic = new Ticket(show.trim());
-            if (findTicket(tic) == null) { //如果不存在
-                System.out.println("The show is not exist!Try again.\n" +
-                        "The list of show is as follows:");
+            if (findTicket(tic) == null) { //如果不存在 //写信1
+                System.out.println("Purchase failed! Please check your letters.");
                 displayShows();
+                PrintWriter outFile = null;
+                try {
+                    outFile = new PrintWriter(new FileWriter("letter.txt", true));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                outFile.printf("""
+                        %s
+                        Dear %s,
+                        
+                        I’m sorry, but we couldn’t complete your ticket purchase.
+                        Unfortunately, '%s' is not an available ticket at NEAT.
+                        
+                        Please check shows' messages and try again.
+                        
+                        Kind regards,
+                        NEAT Ticket Office
+                        
+                        """, getTime(), mem.getName(), tic.getName());
+                outFile.close();
             } else {
                 tic = findTicket(tic);
                 flag = true;
@@ -206,7 +231,7 @@ public class MainProgram {
         } catch (InputMismatchException e) {//输入非数字？
             System.out.println("Please input valid number!");
             return;
-        } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信
+        } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信2
             System.out.println("Purchase failed! Please check your letters.");
             PrintWriter outFile = null;
             try {
@@ -230,49 +255,77 @@ public class MainProgram {
             outFile.close();
             return;
         } catch (PurchaseLimitException e) {
-            System.out.println("Purchase failed! Please check your letters.");
-            PrintWriter outFile = null;
-            try {
-                outFile = new PrintWriter(new FileWriter("letter.txt", true));
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            outFile.printf("""
-                    %s
-                    Dear %s,
-                    
-                    I’m sorry, but we couldn’t complete your ticket purchase.
-                    You cannot buy more than three different types of tickets.
-                    
-                    However, you can still buy more tickets for the shows you already have,
-                    or cancel one of your existing ticket types before adding a new one.
-                    
-                    Please try again later or choose another option.
-                    
-                    Kind regards,
-                    NEAT Ticket Office
-                    
-                    """, getTime(), mem.getName());
-            outFile.close();
-            return;
+            System.out.println(
+                    "Purchase failed! You cannot buy more than 3 ticket types.\n" +
+                            "Remove an existing type or add more of a type you already own."
+            );
         }
 
     }
 
-    public static void writeLetter(String name) throws FileNotFoundException {
-
-
-    }
-
-    public static String getTime() {
-        LocalDateTime current = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return current.format(formatter);
-    }
 
     //    c- 当注册会员取消指定数量的指定票证并将其从其帐户中删除时，更新存储的数据。
     public static void cancel() {
+        Scanner s = new Scanner(System.in);
 
+        System.out.print("Please enter your full name(split by space)>");
+        //①检查会员是否列表
+        try {
+            String[] userName = s.nextLine().split(" ");
+            mem = new Member(userName[0].trim(), userName[1].trim());
+            if (findMember(mem) == null) {
+                System.out.println("Name is not exist!");
+                return;
+            } else
+                mem = findMember(mem);
+
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Input invalid format name!");
+            return;//这里异常怎么还要手动return
+        }
+
+        //②检查门票是否在列表
+        boolean flag = false;
+        while (!flag) {
+            System.out.print("Please enter the show name you want to cancel >");
+            String show = s.nextLine();
+            tic = new Ticket(show.trim());
+            if (findTicket(tic) == null) { //如果不存在
+                System.out.println("Please enter right show name!");
+                displayMembers();
+
+            } else {
+                tic = findTicket(tic);
+                flag = true;
+            }
+        }
+
+        System.out.println("Please input the count of tickets you want to cancel >");
+        try {
+            int purchaseCount = s.nextInt();
+            if (purchaseCount <= 0) { //禁止输入非正数
+                System.out.println("Please enter a positive number!");
+                return;
+            }
+            //①更新库存(ticket)信息 传入值为正数，库存减
+            tic.updateCount(purchaseCount);
+            //②更新会员信息的hashmap 存名字，和对应票数量
+            //mem.purchase(tic.getName(), purchaseCount);
+            mem.purchase(tic.getName(), -purchaseCount);//能不能通过传入负值？
+            System.out.println("Cancel successfully!");
+        } catch (InputMismatchException e) {//输入非数字？
+            System.out.println("Please input valid number!");
+            return;
+        } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信2
+            System.out.println("Purchase failed! Please check your letters.");
+
+            return;
+        } catch (PurchaseLimitException e) {
+            System.out.println(
+                    "Purchase failed! You cannot buy more than 3 ticket types.\n" +
+                            "Remove an existing type or add more of a type you already own."
+            );
+        }
     }
 
 
