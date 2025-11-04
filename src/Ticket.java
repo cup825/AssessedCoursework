@@ -5,8 +5,8 @@ public class Ticket implements Comparable<Ticket> {
     private final double price;
 
     //constructor
-    Ticket() {//用不用写两个构造函数?
-        name = "";
+    Ticket(String name) {//用不用写两个构造函数?
+        this.name=name;
         count = 0;
         price = 0;
     }

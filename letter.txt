@@ -34,3 +34,14 @@ Please try again later or choose another option.
 Kind regards,
 NEAT Ticket Office
 
+2025-11-04 16:18:03
+Dear Mark Jones,
+
+I’m sorry, but we couldn’t complete your ticket purchase.
+There are not enough tickets available for 'Spooky Men' — only 2 left.
+
+Please try again later or choose another option.
+
+Kind regards,
+NEAT Ticket Office
+
