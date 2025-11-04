@@ -113,12 +113,12 @@ public class MainProgram {
 
     //    m- 在屏幕上显示所有会员的信息，包括他们持有每种票的数量、每种票的总价以及所有票的总价。
     public static void displayMembers() {
-        System.out.println("_____________________________________________________________________________");
+        System.out.println("───────────────┬──────────────────────────────────────────────────");
         System.out.printf("%-15s│%-50s %n", "MEMBER NAME", "PURCHASE RECORD");
         for (Member m : memberList) {
             System.out.println(m.toString());
         }
-        System.out.println("_____________________________________________________________________________");
+        System.out.println("───────────────┴──────────────────────────────────────────────────");
     }
 
     //*思考：先实例化Member，传入Member对象。还是传入名字，用返回值实例化。哪种更好？
@@ -182,7 +182,7 @@ public class MainProgram {
             String show = s.nextLine();
             tic = new Ticket(show.trim());
             if (findTicket(tic) == null) { //如果不存在
-                System.out.println("Show is not exist!Try again.\n" +
+                System.out.println("The show is not exist!Try again.\n" +
                         "The list of show is as follows:");
                 displayShows();
             } else {
