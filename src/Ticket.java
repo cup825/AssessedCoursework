@@ -6,7 +6,7 @@ public class Ticket implements Comparable<Ticket> {
 
     //constructor
     Ticket(String name) {//用不用写两个构造函数?
-        this.name=name;
+        this.name = name;
         count = 0;
         price = 0;
     }
@@ -32,7 +32,7 @@ public class Ticket implements Comparable<Ticket> {
 
     @Override
     public String toString() {
-        return String.format("%-50s│%-20d│%5.2f", name, count, price);
+        return String.format("│%-45s│%-18d│%5.2f    │", name, count, price);
     }
 
     @Override //比较票名

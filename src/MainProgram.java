@@ -103,11 +103,12 @@ public class MainProgram {
 
     //    t- 在屏幕上显示所有演出的信息，包括剩余门票数量和每张门票的价格。
     public static void displayShows() {
-        System.out.println("_____________________________________________________________________________");
-        System.out.printf("%-50s│%-20s│%-20s %n", "SHOW NAME", "TICKETS AVAILABLE", "PRICE");
+        System.out.println("┌─────────────────────────────────────────────┬──────────────────┬─────────┐");
+        System.out.printf("│%-45s│%-18s│%-9s│%n", "SHOW NAME", "TICKETS AVAILABLE", "PRICE(£)");
+        System.out.println("├─────────────────────────────────────────────┼──────────────────┼─────────┤");
         for (Ticket t : ticketList)
             System.out.println(t.toString());
-        System.out.println("_____________________________________________________________________________\n");
+        System.out.println("└─────────────────────────────────────────────┴──────────────────┴─────────┘\n");
     }
 
     //    m- 在屏幕上显示所有会员的信息，包括他们持有每种票的数量、每种票的总价以及所有票的总价。
