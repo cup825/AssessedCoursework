@@ -126,7 +126,8 @@ public class MainProgram {
     public static void buy() {
         System.out.print("Please enter your full name(split by space)>");
         Scanner s = new Scanner(System.in);
-        //Member mem; //*到底是更新会员，还是会员列表。但是更新会员就会更新列表吧？
+
+        //①检查会员是否存在 能否通过两个检查操作，讲mem和tic与其相应列表对应
         Member mem = null;//这里对应list里面的member
         try {
             String[] userName = s.nextLine().split(" ");
@@ -140,6 +141,7 @@ public class MainProgram {
             return;//这里异常怎么还要手动return
         }
 
+        //②检查输入演出是否存在。
 //        try {
 //            Member mem = new Member(userName[0], userName[1]);//根本不需要对象，注释掉
 //        } catch (Exception e) {
