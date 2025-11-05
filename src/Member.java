@@ -11,7 +11,7 @@ public class Member implements Comparable<Member> {
     //field
     private final String firstName;
     private final String surname;
-    public HashMap<String, Integer> purchaseRecords = new HashMap<>();//表演名字对应数量。在这初始化。
+    public final HashMap<String, Integer> purchaseRecords = new HashMap<>();//表演名字对应数量。在这初始化。
 
     Member(String firstName, String surname) {
         this.firstName = firstName;
@@ -48,7 +48,7 @@ public class Member implements Comparable<Member> {
             for (Map.Entry<String, Integer> entry : purchaseRecords.entrySet()) { //从循环1得到买票数量
                 String key = entry.getKey();
                 int value = entry.getValue();
-                for (Ticket t : MainProgram.ticketList) {//从循环2得到票单价
+                for (Ticket t : PurchaseTicketPlatform.ticketList) {//从循环2得到票单价
                     if (t.getName().equals(key)) { //找到单价后break
                         cost = t.getPrice() * value;//花费=单价*数量
                         total += cost;
