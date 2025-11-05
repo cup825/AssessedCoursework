@@ -5,8 +5,8 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PurchaseTicketPlatform {
-    public static final SortedLinkedList<Member> memberList = new SortedLinkedList<>();//成员列表
-    public static final SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>();//每个成员，票的列表
+    public final SortedLinkedList<Member> memberList = new SortedLinkedList<>();//成员列表
+    public final SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>();//每个成员，票的列表
     private Member mem;//*这两个是不是在类里声明比较好？
     private Ticket tic;
     private final Scanner input = new Scanner(System.in); //要在类内初始化，但实际直到nextline/int()等才开始读取的
@@ -114,7 +114,7 @@ public class PurchaseTicketPlatform {
         System.out.println("───────────────┬──────────────────────────────────────────────────");
         System.out.printf("%-15s│%-50s %n", "MEMBER NAME", "PURCHASE RECORD");
         for (Member m : memberList) {
-            System.out.println(m.toString());
+            System.out.println(m.toString(ticketList));
         }
         System.out.println("───────────────┴──────────────────────────────────────────────────");
     }
@@ -153,8 +153,8 @@ public class PurchaseTicketPlatform {
             String[] userName = input.nextLine().split(" ");
             mem = new Member(userName[0].trim(), userName[1].trim());
             if (findMember(mem) == null) {
-                //throw new IllegalStateException("Name is not exist!");
-                System.out.println("Name is not exist!");
+                throw new IllegalStateException("Name is not exist!");
+                //System.out.println("Name is not exist!");
                 //return;
             } else
                 mem = findMember(mem);
@@ -181,7 +181,7 @@ public class PurchaseTicketPlatform {
                 System.out.println("Purchase failed! Please check your letters.");
                 displayShows();
 
-                try (PrintWriter outFile = new PrintWriter(new FileWriter("letter.txt", true))) {
+                try (PrintWriter outFile = new PrintWriter(new FileWriter("letters.txt", true))) {
                     outFile.printf("""
                             %s
                             Dear %s,
@@ -207,6 +207,7 @@ public class PurchaseTicketPlatform {
         System.out.println("Please input the count of tickets you want to buy >");
         try {
             int purchaseCount = input.nextInt();
+            input.nextLine();
             if (purchaseCount <= 0) { //禁止输入非正数
                 System.out.println("Please enter a positive number!");
                 return;
@@ -222,7 +223,7 @@ public class PurchaseTicketPlatform {
         } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信2
             System.out.println("Purchase failed! Please check your letters.");
             //PrintWriter outFile = null;
-            try (PrintWriter outFile = new PrintWriter(new FileWriter("letter.txt", true))) {
+            try (PrintWriter outFile = new PrintWriter(new FileWriter("letters.txt", true))) {
                 outFile.printf("""
                         %s
                         Dear %s,
@@ -270,6 +271,7 @@ public class PurchaseTicketPlatform {
         System.out.println("Please input the count of tickets you want to cancel >");
         try {
             int purchaseCount = input.nextInt();
+            input.nextLine();
             if (purchaseCount <= 0) { //禁止输入非正数
                 System.out.println("Please enter a positive number!");
                 return;

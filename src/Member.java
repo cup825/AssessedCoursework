@@ -5,9 +5,9 @@ public class Member implements Comparable<Member> {
     //field
     private final String firstName;
     private final String surname;
-    public final HashMap<String, Integer> purchaseRecords = new HashMap<>();//表演名字对应数量。在这初始化。
+    private final HashMap<String, Integer> purchaseRecords = new HashMap<>();//表演名字对应数量。在这初始化。
 
-    Member(String firstName, String surname) {
+    public Member(String firstName, String surname) {
         this.firstName = firstName;
         this.surname = surname;
     }
@@ -25,14 +25,14 @@ public class Member implements Comparable<Member> {
         return firstName + " " + surname;
     }
 
-    @Override
-    public String toString() { //Member对象toString
+    //@Override
+    public String toString(SortedLinkedList<Ticket> list) { //Member对象toString
         return "───────────────┼──────────────────────────────────────────────────\n" +
-                String.format("%-15s│%-20s", firstName + " " + surname, recordToString());
+                String.format("%-15s│%-20s", firstName + " " + surname, recordToString(list));
     }
 
 
-    public String recordToString() {
+    public String recordToString(SortedLinkedList<Ticket> list) {
         StringBuilder res = new StringBuilder(); //拼接字符串
         double cost = 0.0, total = 0.0;
         if (purchaseRecords.isEmpty()) //暂无购买记录
@@ -42,7 +42,7 @@ public class Member implements Comparable<Member> {
             for (Map.Entry<String, Integer> entry : purchaseRecords.entrySet()) { //得到买票数量
                 String key = entry.getKey();
                 int value = entry.getValue();
-                for (Ticket t : PurchaseTicketPlatform.ticketList) {//得到票单价
+                for (Ticket t : list) {//得到票单价
                     if (t.getName().equals(key)) { //找到单价后break
                         cost = t.getPrice() * value;//花费=单价*数量
                         total += cost;

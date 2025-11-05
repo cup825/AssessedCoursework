@@ -5,13 +5,13 @@ public class Ticket implements Comparable<Ticket> {
     private final double price;
 
     //constructor
-    Ticket(String name) {//这里需要写两个构造函数，因为用户输入演出名时，不行
+    public Ticket(String name) {//这里需要写两个构造函数，因为用户输入演出名时，不行
         this.name = name;
         count = 0;
         price = 0;
     }
 
-    Ticket(String name, int count, double price) {
+    public Ticket(String name, int count, double price) {
         this.name = name;
         this.count = count;
         this.price = price;
