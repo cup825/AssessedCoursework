@@ -2,12 +2,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Member implements Comparable<Member> {
-    //For each member, the office should know their first name, surname
-//
-//and their purchased tickets together with the quantity of each type of ticket they have purchased.
-//To avoid abuse of the discount, a member can hold at most three different types of ticket at a time
-//(but can hold more than three tickets in total).
-//We also assume that no two members share both their first name and their surname.
     //field
     private final String firstName;
     private final String surname;
@@ -38,17 +32,17 @@ public class Member implements Comparable<Member> {
     }
 
 
-    public String recordToString() {//不用lambda表达式
+    public String recordToString() {
         StringBuilder res = new StringBuilder(); //拼接字符串
         double cost = 0.0, total = 0.0;
-        if (purchaseRecords.isEmpty())
-            res.append("(No purchases yet)"); //暂无购买记录
+        if (purchaseRecords.isEmpty()) //暂无购买记录
+            res.append("(No purchases yet)");
         else { //有买票记录时: 需要查询票的列表里对应单价，再*value
             int i = 0;
-            for (Map.Entry<String, Integer> entry : purchaseRecords.entrySet()) { //从循环1得到买票数量
+            for (Map.Entry<String, Integer> entry : purchaseRecords.entrySet()) { //得到买票数量
                 String key = entry.getKey();
                 int value = entry.getValue();
-                for (Ticket t : PurchaseTicketPlatform.ticketList) {//从循环2得到票单价
+                for (Ticket t : PurchaseTicketPlatform.ticketList) {//得到票单价
                     if (t.getName().equals(key)) { //找到单价后break
                         cost = t.getPrice() * value;//花费=单价*数量
                         total += cost;
@@ -68,31 +62,6 @@ public class Member implements Comparable<Member> {
 
         return res.toString();
     }
-
-    //    public String recordToString() {
-//        StringBuilder sMap = new StringBuilder(); //拼接字符串
-//        double total=0.0;
-//        if (purchaseRecords.isEmpty())
-//            sMap.append("(No purchases yet)"); //暂无购买记录
-//        else { //有买票记录时 需要查询票的列表里对应单价，再*value
-//            purchaseRecords.forEach((key, value) -> { //lambda表达式
-//                double cost = 0.0;
-//                //拼接票名，数量，该票总花费
-//                //花费：数量x价格 查询名字对应的价格,能不能写个名字价格map？
-//                for (Ticket t : MainProgram.ticketList) {
-//                    if (t.getName().equals(key)) { //找到单价后break
-//                        cost = t.getPrice() * value;//花费=单价*数量
-//                        break;
-//                    }
-//                }
-//                total += cost;
-//                sMap.append(key).append(":").append(value)
-//                        .append("(").append(cost).append("£)\n");
-//            });
-//            sMap.append("Total cost: ").append(String.format("%.2f", total)).append("£");
-//        }
-//        return sMap.toString();
-//    }
 
     @Override //比较姓氏，姓氏相同比较名字
     public int compareTo(Member o) {

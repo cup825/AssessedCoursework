@@ -5,7 +5,7 @@ public class Ticket implements Comparable<Ticket> {
     private final double price;
 
     //constructor
-    Ticket(String name) {//用不用写两个构造函数?这里用
+    Ticket(String name) {//这里需要写两个构造函数，因为用户输入演出名时，不行
         this.name = name;
         count = 0;
         price = 0;
@@ -42,8 +42,7 @@ public class Ticket implements Comparable<Ticket> {
 
     public void updateCount(int i) { //可正可负 购买-1，退票+1
         if (count + i < 0)
-            //throw new IllegalStateException();//当余票为负数时抛出异常
-            throw new NotEnoughTicketsException();
+            throw new NotEnoughTicketsException();//当余票为负数时抛出异常
         count += i; //没异常时才更新
     }
 }

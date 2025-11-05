@@ -11,10 +11,7 @@ public class PurchaseTicketPlatform {
     private Ticket tic;
     private final Scanner input = new Scanner(System.in); //要在类内初始化，但实际直到nextline/int()等才开始读取的
 
-    //    你的程序应该从文件中读取已注册会员列表和可用票证列表。
-//    输入文件的内容应采用以下格式：第一行包含一个整数，表示已注册会员的数量，
-//    后面是会员信息（每个会员一行，包含其名字和姓氏）。
-
+    //从文件中读取已注册会员列表和可用票证列表。
     public void loadList() {
         try {
             Scanner s = new Scanner(new File("input_data.txt"));
@@ -122,16 +119,7 @@ public class PurchaseTicketPlatform {
         System.out.println("───────────────┴──────────────────────────────────────────────────");
     }
 
-    //*思考：先实例化Member，传入Member对象。还是传入名字，用返回值实例化。哪种更好？
-    //返回一个列表对应的对象，方便后续使用
-//    public static Member isMemberExist(String fName, String lName) { //原来写的布尔值，思考后改为Member
-//        for (Member m : MainProgram.memberList) {
-//            if (fName.equals(m.getFirstName()) && lName.equals(m.getSurname()))
-//                return m;
-//        }
-//        return null;
-//    }
-
+    //比起boolean,返回值为对象更好，这样可以直接返回列表已有对象
     public Member findMember(Member mem) {
         for (Member m : memberList) {
             if (m.compareTo(mem) == 0)
@@ -159,13 +147,13 @@ public class PurchaseTicketPlatform {
     }
 
     public void checkName() {
-        //Scanner s = new Scanner(System.in);
         System.out.print("Please enter your full name(split by space)>");
         //①检查会员是否列表
         try {
             String[] userName = input.nextLine().split(" ");
             mem = new Member(userName[0].trim(), userName[1].trim());
             if (findMember(mem) == null) {
+                //throw new IllegalStateException("Name is not exist!");
                 System.out.println("Name is not exist!");
                 //return;
             } else
