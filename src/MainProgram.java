@@ -254,11 +254,8 @@ public class MainProgram {
                     """, getTime(), mem.getName(), tic.getName(), tic.getCount());
             outFile.close();
             return;
-        } catch (PurchaseLimitException e) {
-            System.out.println(
-                    "Purchase failed! You cannot buy more than 3 ticket types.\n" +
-                            "Remove an existing type or add more of a type you already own."
-            );
+        } catch (PrintOnlyException e) { //票超过限购种类
+            System.out.println(e.getMessage());
         }
 
     }
@@ -281,7 +278,7 @@ public class MainProgram {
 
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Input invalid format name!");
-            return;//这里异常怎么还要手动return
+            return;
         }
 
         //②检查门票是否在列表
@@ -311,21 +308,17 @@ public class MainProgram {
             tic.updateCount(purchaseCount);
             //②更新会员信息的hashmap 存名字，和对应票数量
             //mem.purchase(tic.getName(), purchaseCount);
-            mem.purchase(tic.getName(), -purchaseCount);//能不能通过传入负值？
+            mem.purchase(tic.getName(), -purchaseCount);//能不能通过传入负值？ 可以
             System.out.println("Cancel successfully!");
         } catch (InputMismatchException e) {//输入非数字？
             System.out.println("Please input valid number!");
             return;
         } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信2
             System.out.println("Purchase failed! Please check your letters.");
-
-            return;
-        } catch (PurchaseLimitException e) {
-            System.out.println(
-                    "Purchase failed! You cannot buy more than 3 ticket types.\n" +
-                            "Remove an existing type or add more of a type you already own."
-            );
+        } catch (PrintOnlyException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
 
