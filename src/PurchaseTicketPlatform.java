@@ -57,7 +57,6 @@ public class PurchaseTicketPlatform {
     }
 
     public void run() {
-        Scanner input = new Scanner(System.in);
         loadList();
         boolean flag = true;
         while (flag) try {
