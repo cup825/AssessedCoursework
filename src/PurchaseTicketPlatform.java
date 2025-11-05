@@ -5,8 +5,8 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PurchaseTicketPlatform {
-    public final SortedLinkedList<Member> memberList = new SortedLinkedList<>();//成员列表
-    public final SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>();//每个成员，票的列表
+    private final SortedLinkedList<Member> memberList = new SortedLinkedList<>();//成员列表
+    private final SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>();//每个成员，票的列表
     private Member mem;//*这两个是不是在类里声明比较好？
     private Ticket tic;
     private final Scanner input = new Scanner(System.in); //要在类内初始化，但实际直到nextline/int()等才开始读取的
@@ -92,8 +92,7 @@ public class PurchaseTicketPlatform {
                     System.out.println("Please type valid option!");
                     break;
             }
-        } catch (PrintOnlyException e) {
-
+        } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -159,6 +158,7 @@ public class PurchaseTicketPlatform {
                 mem = findMember(mem);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Input invalid format name!");
+            mem = null;//明确重置，防止用到错误对象
             //return;
         }
     }
@@ -170,6 +170,7 @@ public class PurchaseTicketPlatform {
     //步骤如下：
     public void buy() {
         checkName();//①检查会员名是否存在列表
+        if (mem == null) return;
         //②检查门票是否在列表
         boolean flag = false;
         while (!flag) {
@@ -203,7 +204,7 @@ public class PurchaseTicketPlatform {
             }
         }
 
-        System.out.println("Please input the count of tickets you want to buy >");
+        System.out.print("Please input the count of tickets you want to buy >");
         try {
             int purchaseCount = input.nextInt();
             input.nextLine();
@@ -241,8 +242,8 @@ public class PurchaseTicketPlatform {
                 throw new RuntimeException(ex);
             }
 
-        } catch (PrintOnlyException e) { //票超过限购种类
-            System.out.println(e.getMessage());
+//        } catch (IllegalStateException e) { //票超过限购种类
+//            System.out.println(e.getMessage());
         }
 
     }
@@ -251,6 +252,7 @@ public class PurchaseTicketPlatform {
     //    c- 当注册会员取消指定数量的指定票证并将其从其帐户中删除时，更新存储的数据。
     public void cancel() {
         checkName();
+        if (mem == null) return;
         //②检查门票是否在列表
         boolean flag = true;
         while (flag) {
@@ -267,7 +269,7 @@ public class PurchaseTicketPlatform {
             }
         }
 
-        System.out.println("Please input the count of tickets you want to cancel >");
+        System.out.print("Please input the count of tickets you want to cancel >");
         try {
             int purchaseCount = input.nextInt();
             input.nextLine();
@@ -286,8 +288,8 @@ public class PurchaseTicketPlatform {
             //return;
         } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信2
             System.out.println("Purchase failed! Please check your letters.");
-        } catch (PrintOnlyException e) {
-            System.out.println(e.getMessage());
+//        } catch (IllegalStateException e) {
+//            System.out.println(e.getMessage());
         }
 
     }
