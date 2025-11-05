@@ -57,6 +57,12 @@ public class PurchaseTicketPlatform {
     }
 
     public void run() {
+        try (PrintWriter clearFile = new PrintWriter("letters.txt")) {
+            clearFile.print(""); // 清空文件内容
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot clear letters.txt");
+        }
+
         loadList();
         boolean flag = true;
         while (flag) try {
@@ -112,7 +118,7 @@ public class PurchaseTicketPlatform {
         System.out.println("───────────────┬──────────────────────────────────────────────────");
         System.out.printf("%-15s│%-50s %n", "MEMBER NAME", "PURCHASE RECORD");
         for (Member m : memberList) {
-            System.out.println(m.toString(ticketList));
+            System.out.println(m.getMemberMessage(ticketList));
         }
         System.out.println("───────────────┴──────────────────────────────────────────────────");
     }

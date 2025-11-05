@@ -26,7 +26,7 @@ public class Member implements Comparable<Member> {
     }
 
     //@Override
-    public String toString(SortedLinkedList<Ticket> list) { //Member对象toString
+    public String getMemberMessage(SortedLinkedList<Ticket> list) { //Member对象toString
         return "───────────────┼──────────────────────────────────────────────────\n" +
                 String.format("%-15s│%-20s", firstName + " " + surname, recordToString(list));
     }
