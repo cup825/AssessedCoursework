@@ -41,8 +41,8 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public void updateCount(int i) { //可正可负 购买-1，退票+1
-        if (count + i < 0)
+        if (i < 0 && count + i < 0)
             throw new NotEnoughTicketsException();//当余票为负数时抛出异常
-        count += i; //没异常时才更新
+        count += i;
     }
 }

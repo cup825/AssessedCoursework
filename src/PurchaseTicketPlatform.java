@@ -6,16 +6,15 @@ import java.util.Scanner;
 
 public class PurchaseTicketPlatform {
     private final SortedLinkedList<Member> memberList = new SortedLinkedList<>();//成员列表
-    private final SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>();//每个成员，票的列表
-    private Member mem;//*这两个是不是在类里声明比较好？
+    private final SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>();//演出列表
+    private Member mem;
     private Ticket tic;
-    private final Scanner input = new Scanner(System.in); //要在类内初始化，但实际直到nextline/int()等才开始读取的
+    private final Scanner input = new Scanner(System.in); //在类内初始化，但实际直到nextline/int()等才开始读取的
 
     //从文件中读取已注册会员列表和可用票证列表。
     public void loadList() {
         try {
             Scanner s = new Scanner(new File("input_data.txt"));
-            //s.nextLine();
             int memberCount = s.nextInt();//第一行数字
             s.nextLine();//到姓名那一行
             for (int i = 0; i < memberCount; i++) {
@@ -58,7 +57,7 @@ public class PurchaseTicketPlatform {
 
     public void run() {
         try (PrintWriter clearFile = new PrintWriter("letters.txt")) {
-            clearFile.print(""); // 清空文件内容
+            clearFile.print(""); //清空文件内容
         } catch (FileNotFoundException e) {
             System.out.println("Cannot clear letters.txt");
         }
@@ -76,7 +75,7 @@ public class PurchaseTicketPlatform {
                 System.out.println("Please type valid option!");
                 continue;
             }
-            char ch = line.charAt(0); //*提取字符串第一位字符 ？是否有必要
+            char ch = line.charAt(0);
             switch (ch) {
                 case 'f':  //f- 完成程序的运行。
                     System.out.println("You have exited the program.");
@@ -123,7 +122,7 @@ public class PurchaseTicketPlatform {
         System.out.println("───────────────┴──────────────────────────────────────────────────");
     }
 
-    //比起boolean,返回值为对象更好，这样可以直接返回列表已有对象
+    //比起返回值boolean,返回值为对象更好，这样可以直接返回列表已有对象
     public Member findMember(Member mem) {
         for (Member m : memberList) {
             if (m.compareTo(mem) == 0)
@@ -150,34 +149,26 @@ public class PurchaseTicketPlatform {
         return current.format(formatter);
     }
 
-    public void checkName() {
+    public void checkName() { //①检查会员是否在列表
         System.out.print("Please enter your full name(split by space)>");
-        //①检查会员是否列表
         try {
             String[] userName = input.nextLine().split(" ");
             mem = new Member(userName[0].trim(), userName[1].trim());
             if (findMember(mem) == null) {
                 throw new IllegalStateException("Name is not exist!");
-                //System.out.println("Name is not exist!");
-                //return;
             } else
                 mem = findMember(mem);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Input invalid format name!");
             mem = null;//明确重置，防止用到错误对象
-            //return;
         }
     }
 
     //    b- 当注册会员购买指定数量的指定票证并添加到其帐户时，更新存储的数据。
-    //需要修改的数据如下:
-    //Member类 map<String, Integer>，purchaseRecords，根据用户输入
-    //ticketList里的某项Ticket
-    //步骤如下：
     public void buy() {
-        checkName();//①检查会员名是否存在列表
+        checkName();//检查会员名是否存在列表
         if (mem == null) return;
-        //②检查门票是否在列表
+        //检查门票是否在列表
         boolean flag = false;
         while (!flag) {
             System.out.print("Please enter the show name you want to buy >");
@@ -247,19 +238,15 @@ public class PurchaseTicketPlatform {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-
-//        } catch (IllegalStateException e) { //票超过限购种类
-//            System.out.println(e.getMessage());
         }
 
     }
-
 
     //    c- 当注册会员取消指定数量的指定票证并将其从其帐户中删除时，更新存储的数据。
     public void cancel() {
         checkName();
         if (mem == null) return;
-        //②检查门票是否在列表
+        //检查门票是否在列表
         boolean flag = true;
         while (flag) {
             System.out.print("Please enter the show name you want to cancel >");
@@ -283,10 +270,9 @@ public class PurchaseTicketPlatform {
                 System.out.println("Please enter a positive number!");
                 return;
             }
-            //①更新库存(ticket)信息 传入值为正数，库存减
+            //①更新库存(ticket)信息 传入值为正数，库存-purchaseCount
             tic.updateCount(purchaseCount);
             //②更新会员信息的hashmap 存名字，和对应票数量
-            //mem.purchase(tic.getName(), purchaseCount);
             mem.purchase(tic.getName(), -purchaseCount);//能不能通过传入负值？ 可以
             System.out.println("Cancel successfully!");
         } catch (InputMismatchException e) {//输入非数字？

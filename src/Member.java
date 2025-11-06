@@ -7,19 +7,20 @@ public class Member implements Comparable<Member> {
     private final String surname;
     private final HashMap<String, Integer> purchaseRecords = new HashMap<>();//表演名字对应数量。在这初始化。
 
+    //method
     public Member(String firstName, String surname) {
         this.firstName = firstName;
         this.surname = surname;
     }
 
-    //method
-    public String getFirstName() {
-        return firstName;
-    }
 
-    public String getSurname() {
-        return surname;
-    }
+//    public String getFirstName() {
+//        return firstName;
+//    }
+//
+//    public String getSurname() {
+//        return surname;
+//    }
 
     public String getName() {
         return firstName + " " + surname;
@@ -39,6 +40,8 @@ public class Member implements Comparable<Member> {
             res.append("(No purchases yet)");
         else { //有买票记录时: 需要查询票的列表里对应单价，再*value
             int i = 0;
+
+            //可以把以下一段作为方法提出来
             for (Map.Entry<String, Integer> entry : purchaseRecords.entrySet()) { //得到买票数量
                 String key = entry.getKey();
                 int value = entry.getValue();
@@ -49,6 +52,7 @@ public class Member implements Comparable<Member> {
                         break;
                     }
                 }
+
                 String left = key + ":" + value;
                 if (i == 0)
                     res.append(String.format("%-40s %8.2f£ %n", left, cost));
