@@ -4,29 +4,41 @@ import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Main platform class for ticket purchase and management system.
+ * Handles member registration, ticket inventory, purchase operations, and cancellation.
+ *
+ * @author Ziyue Ren
+ * @version 1.0
+ * @see Member
+ * @see Ticket
+ * @see SortedLinkedList
+ */
 public class PurchaseTicketPlatform {
-    private final SortedLinkedList<Member> memberList = new SortedLinkedList<>();//成员列表
-    private final SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>();//演出列表
-    private Member mem;
-    private Ticket tic;
-    private final Scanner input = new Scanner(System.in); //在类内初始化，但实际直到nextline/int()等才开始读取的
+    private final SortedLinkedList<Member> memberList = new SortedLinkedList<>(); // Member list
+    private final SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>(); // Show list
+    private Member currentMember;
+    private Ticket currentTicket;
+    private final Scanner input = new Scanner(System.in); // Scanner for user input
 
-    //从文件中读取已注册会员列表和可用票证列表。
+    /**
+     * Loads member and ticket data from input file.
+     */
     public void loadList() {
         try {
             Scanner s = new Scanner(new File("input_data.txt"));
-            int memberCount = s.nextInt();//第一行数字
-            s.nextLine();//到姓名那一行
+            int memberCount = s.nextInt(); // First line number
+            s.nextLine(); // Move to name line
             for (int i = 0; i < memberCount; i++) {
-                String line = s.nextLine();//读取会员名
+                String line = s.nextLine(); // Read member name
                 String[] str = line.split(" ");
                 Member mem = new Member(str[0].trim(), str[1].trim());
                 memberList.add(mem);
             }
 
             int showCount = s.nextInt();
-            s.nextLine();//!
-            for (int i = 0; i < showCount; i++) {//一次循环读三行
+            s.nextLine(); // Move to next line
+            for (int i = 0; i < showCount; i++) { // Read three lines per show
                 try {
                     Ticket tic = new Ticket(
                             s.nextLine(),
@@ -35,7 +47,7 @@ public class PurchaseTicketPlatform {
                     );
                     ticketList.add(tic);
                 } catch (NumberFormatException e) {
-                    System.out.println("转换int/double时失败");
+                    System.out.println("Failed to convert int/double");
                 }
             }
 
@@ -44,6 +56,9 @@ public class PurchaseTicketPlatform {
         }
     }
 
+    /**
+     * Displays the main menu options.
+     */
     public void printMenu() {
         System.out.print("""
                 ╭──────── Show & Member Management Menu ────────╮
@@ -55,9 +70,12 @@ public class PurchaseTicketPlatform {
                 Please type your option and press Enter >""");
     }
 
+    /**
+     * Main program loop handling user interactions.
+     */
     public void run() {
         try (PrintWriter clearFile = new PrintWriter("letters.txt")) {
-            clearFile.print(""); //清空文件内容
+            clearFile.print(""); // Clear file content
         } catch (FileNotFoundException e) {
             System.out.println("Cannot clear letters.txt");
         }
@@ -67,17 +85,17 @@ public class PurchaseTicketPlatform {
         while (flag) try {
             printMenu();
             String line = input.nextLine();
-            if (line.isEmpty()) {//check empty
+            if (line.isEmpty()) { // Check empty input
                 System.out.println("Input can not be empty!");
                 continue;
             }
-            if (line.length() != 1) {//check length
+            if (line.length() != 1) { // Check input length
                 System.out.println("Please type valid option!");
                 continue;
             }
             char ch = line.charAt(0);
             switch (ch) {
-                case 'f':  //f- 完成程序的运行。
+                case 'f':  // Exit program
                     System.out.println("You have exited the program.");
                     flag = false;
                     break;
@@ -102,7 +120,9 @@ public class PurchaseTicketPlatform {
         }
     }
 
-    //    t- 在屏幕上显示所有演出的信息，包括剩余门票数量和每张门票的价格。
+    /**
+     * Displays all shows with availability and pricing.
+     */
     public void displayShows() {
         System.out.println("┌─────────────────────────────────────────────┬──────────────────┬─────────┐");
         System.out.printf("│%-45s│%-18s│%-9s│%n", "SHOW NAME", "TICKETS AVAILABLE", "PRICE(£)");
@@ -112,7 +132,9 @@ public class PurchaseTicketPlatform {
         System.out.println("└─────────────────────────────────────────────┴──────────────────┴─────────┘\n");
     }
 
-    //    m- 在屏幕上显示所有会员的信息，包括他们持有每种票的数量、每种票的总价以及所有票的总价。
+    /**
+     * Displays all members with their purchase records.
+     */
     public void displayMembers() {
         System.out.println("───────────────┬──────────────────────────────────────────────────");
         System.out.printf("%-15s│%-50s %n", "MEMBER NAME", "PURCHASE RECORD");
@@ -122,59 +144,86 @@ public class PurchaseTicketPlatform {
         System.out.println("───────────────┴──────────────────────────────────────────────────");
     }
 
-    //比起返回值boolean,返回值为对象更好，这样可以直接返回列表已有对象
+    /**
+     * Finds a member in the member list.
+     *
+     * @param mem the member to find
+     * @return the found member or null if not found
+     */
     public Member findMember(Member mem) {
         for (Member m : memberList) {
-            if (m.compareTo(mem) == 0)
-                return m;//返回列表已有对象
-            else if (m.compareTo(mem) > 0)
+            if (m.compareTo(mem) == 0) {
+                return m; // Return existing object
+            } else if (m.compareTo(mem) > 0) {
                 return null;
+            }
         }
         return null;
     }
 
+    /**
+     * Finds a ticket in the ticket list.
+     *
+     * @param tic the ticket to find
+     * @return the found ticket or null if not found
+     */
     public Ticket findTicket(Ticket tic) {
         for (Ticket t : ticketList) {
             if (t.compareTo(tic) == 0) {
-                return t; // 返回列表中已有的对象
-            } else if (t.compareTo(tic) > 0)
+                return t; // Return existing object
+            } else if (t.compareTo(tic) > 0) {
                 return null;
+            }
         }
         return null;
     }
 
+    /**
+     * Gets current timestamp in formatted string.
+     *
+     * @return formatted current time string
+     */
     public String getTime() {
         LocalDateTime current = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return current.format(formatter);
     }
 
-    public void checkName() { //①检查会员是否在列表
+    /**
+     * Validates member name input and finds member in list.
+     */
+    public void checkName() {
         System.out.print("Please enter your full name(split by space)>");
         try {
             String[] userName = input.nextLine().split(" ");
-            mem = new Member(userName[0].trim(), userName[1].trim());
-            if (findMember(mem) == null) {
+            currentMember = new Member(userName[0].trim(), userName[1].trim());
+            if (findMember(currentMember) == null) {
                 throw new IllegalStateException("Name is not exist!");
-            } else
-                mem = findMember(mem);
+            } else {
+                currentMember = findMember(currentMember);
+            }
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Input invalid format name!");
-            mem = null;//明确重置，防止用到错误对象
+            currentMember = null; // Reset to prevent using wrong object
         }
     }
 
-    //    b- 当注册会员购买指定数量的指定票证并添加到其帐户时，更新存储的数据。
+    /**
+     * Handles ticket purchase process including validation and updates.
+     */
     public void buy() {
-        checkName();//检查会员名是否存在列表
-        if (mem == null) return;
-        //检查门票是否在列表
-        boolean flag = false;
-        while (!flag) {
+        checkName(); // Validate member name
+
+        if (currentMember == null)
+            return;
+
+        // Validate show name exists
+        boolean flag = true;
+        while (flag) {
             System.out.print("Please enter the show name you want to buy >");
             String show = input.nextLine();
-            tic = new Ticket(show.trim());
-            if (findTicket(tic) == null) { //如果不存在 //写信1
+            currentTicket = new Ticket(show.trim());
+            if (findTicket(currentTicket) == null) { // Show doesn't exist - send letter
                 System.out.println("Purchase failed! Please check your letters.");
                 displayShows();
 
@@ -191,13 +240,13 @@ public class PurchaseTicketPlatform {
                             Kind regards,
                             NEAT Ticket Office
                             
-                            """, getTime(), mem.getName(), tic.getName());
+                            """, getTime(), currentMember.getName(), currentTicket.getName());
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             } else {
-                tic = findTicket(tic);
-                flag = true;
+                currentTicket = findTicket(currentTicket);
+                flag = false;
             }
         }
 
@@ -205,21 +254,19 @@ public class PurchaseTicketPlatform {
         try {
             int purchaseCount = input.nextInt();
             input.nextLine();
-            if (purchaseCount <= 0) { //禁止输入非正数
+            if (purchaseCount <= 0) { // Prevent non-positive input
                 System.out.println("Please enter a positive number!");
                 return;
             }
-            //①更新库存(ticket)信息 传入值为负数
-            tic.updateCount(-purchaseCount);
-            //②更新会员信息的hashmap 存名字，和对应票数量
-            mem.purchase(tic.getName(), purchaseCount);
+            // Update ticket inventory (negative count)
+            currentTicket.updateCount(-purchaseCount);
+            // Update member's purchase records
+            currentMember.purchase(currentTicket.getName(), purchaseCount);
             System.out.println("Purchase successfully!");
-        } catch (InputMismatchException e) {//输入非数字？
+        } catch (InputMismatchException e) { // Invalid number input
             System.out.println("Please input valid number!");
-            //return;
-        } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信2
+        } catch (NotEnoughTicketsException e) { // Insufficient tickets - send letter
             System.out.println("Purchase failed! Please check your letters.");
-            //PrintWriter outFile = null;
             try (PrintWriter outFile = new PrintWriter(new FileWriter("letters.txt", true))) {
                 outFile.printf("""
                         %s
@@ -233,31 +280,33 @@ public class PurchaseTicketPlatform {
                         Kind regards,
                         NEAT Ticket Office
                         
-                        """, getTime(), mem.getName(), tic.getName(), tic.getCount());
-                //return;
+                        """, getTime(), currentMember.getName(), currentTicket.getName(), currentTicket.getCount());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }
-
     }
 
-    //    c- 当注册会员取消指定数量的指定票证并将其从其帐户中删除时，更新存储的数据。
+    /**
+     * Handles ticket cancellation process including validation and updates.
+     */
     public void cancel() {
         checkName();
-        if (mem == null) return;
-        //检查门票是否在列表
+
+        if (currentMember == null)
+            return;
+
+        // Validate show name exists
         boolean flag = true;
         while (flag) {
             System.out.print("Please enter the show name you want to cancel >");
             String show = input.nextLine();
-            tic = new Ticket(show.trim());
-            if (findTicket(tic) == null) { //如果不存在
+            currentTicket = new Ticket(show.trim());
+            if (findTicket(currentTicket) == null) { // Show doesn't exist
                 System.out.println("Please enter right show name!");
                 displayMembers();
-
             } else {
-                tic = findTicket(tic);
+                currentTicket = findTicket(currentTicket);
                 flag = false;
             }
         }
@@ -266,25 +315,19 @@ public class PurchaseTicketPlatform {
         try {
             int purchaseCount = input.nextInt();
             input.nextLine();
-            if (purchaseCount <= 0) { //禁止输入非正数
+            if (purchaseCount <= 0) { // Prevent non-positive input
                 System.out.println("Please enter a positive number!");
                 return;
             }
-            //①更新库存(ticket)信息 传入值为正数，库存-purchaseCount
-            tic.updateCount(purchaseCount);
-            //②更新会员信息的hashmap 存名字，和对应票数量
-            mem.purchase(tic.getName(), -purchaseCount);//能不能通过传入负值？ 可以
+            // Update ticket inventory (positive count)
+            currentTicket.updateCount(purchaseCount);
+            // Update member's purchase records (negative count)
+            currentMember.purchase(currentTicket.getName(), -purchaseCount);
             System.out.println("Cancel successfully!");
-        } catch (InputMismatchException e) {//输入非数字？
+        } catch (InputMismatchException e) { // Invalid number input
             System.out.println("Please input valid number!");
-            //return;
-        } catch (NotEnoughTicketsException e) { //捕捉该方法异常，防止票不足还售卖 //写信2
+        } catch (NotEnoughTicketsException e) { // Insufficient tickets for cancellation
             System.out.println("Purchase failed! Please check your letters.");
-//        } catch (IllegalStateException e) {
-//            System.out.println(e.getMessage());
         }
-
     }
-
-
 }
