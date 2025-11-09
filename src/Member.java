@@ -1,101 +1,131 @@
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a member in the ticket management system.
+ * Members can purchase tickets and maintain purchase records.
+ * Implements Comparable interface for natural ordering by surname and first name.
+ *
+ * @author Ziyue Ren
+ * @version 1.0
+ * @see Ticket
+ * @see SortedLinkedList
+ */
 public class Member implements Comparable<Member> {
-    //field
     private final String firstName;
     private final String surname;
-    private final HashMap<String, Integer> purchaseRecords = new HashMap<>();//表演名字对应数量。在这初始化。
+    private final HashMap<String, Integer> purchaseRecords = new HashMap<>(); // Show name to quantity mapping
 
-    //method
+    /**
+     * Constructs a new Member with given first name and surname.
+     *
+     * @param firstName the member's first name
+     * @param surname   the member's surname
+     */
     public Member(String firstName, String surname) {
         this.firstName = firstName;
         this.surname = surname;
     }
 
-
-//    public String getFirstName() {
-//        return firstName;
-//    }
-//
-//    public String getSurname() {
-//        return surname;
-//    }
-
+    /**
+     * Returns the full name of the member.
+     *
+     * @return full name as "firstName surname"
+     */
     public String getName() {
         return firstName + " " + surname;
     }
 
-    //@Override
-    public String getMemberMessage(SortedLinkedList<Ticket> list) { //Member对象toString
+    /**
+     * Generates formatted member information message.
+     *
+     * @param list the ticket list for price lookup
+     * @return formatted member message string
+     */
+    public String getMemberMessage(SortedLinkedList<Ticket> list) {
         return "───────────────┼──────────────────────────────────────────────────\n" +
                 String.format("%-15s│%-20s", firstName + " " + surname, recordToString(list));
     }
 
-
+    /**
+     * Converts purchase records to formatted string with cost calculations.
+     *
+     * @param list the ticket list for price lookup
+     * @return formatted purchase record string
+     */
     public String recordToString(SortedLinkedList<Ticket> list) {
-        StringBuilder res = new StringBuilder(); //拼接字符串
+        StringBuilder res = new StringBuilder(); // For string concatenation
         double cost = 0.0, total = 0.0;
-        if (purchaseRecords.isEmpty()) //暂无购买记录
+
+        if (purchaseRecords.isEmpty()) { // No purchase records yet
             res.append("(No purchases yet)");
-        else { //有买票记录时: 需要查询票的列表里对应单价，再*value
+        } else { // Has purchase records: need to lookup ticket prices and calculate costs
             int i = 0;
 
-            //可以把以下一段作为方法提出来
-            for (Map.Entry<String, Integer> entry : purchaseRecords.entrySet()) { //得到买票数量
+            for (Map.Entry<String, Integer> entry : purchaseRecords.entrySet()) {
                 String key = entry.getKey();
                 int value = entry.getValue();
-                for (Ticket t : list) {//得到票单价
-                    if (t.getName().equals(key)) { //找到单价后break
-                        cost = t.getPrice() * value;//花费=单价*数量
+                for (Ticket t : list) { // Find ticket price
+                    if (t.getName().equals(key)) {
+                        cost = t.getPrice() * value; // Cost = unit price × quantity
                         total += cost;
                         break;
                     }
                 }
 
                 String left = key + ":" + value;
-                if (i == 0)
+                if (i == 0) {
                     res.append(String.format("%-40s %8.2f£ %n", left, cost));
-                else
+                } else {
                     res.append(String.format("%-15s│%-40s %8.2f£ %n", "", left, cost));
+                }
                 i++;
             }
 
-            res.append(String.format("%-15s│%-40s %8.2f£", "", "Total cost: ", total));//补空格
+            res.append(String.format("%-15s│%-40s %8.2f£", "", "Total cost: ", total)); // Add padding
         }
 
         return res.toString();
     }
 
-    @Override //比较姓氏，姓氏相同比较名字
+    /**
+     * Compares members by surname, then by first name if surnames are equal.
+     *
+     * @param o the other member to compare with
+     * @return negative, zero, or positive integer based on comparison
+     */
+    @Override
     public int compareTo(Member o) {
-        if (!this.surname.equals(o.surname)) { //如果姓不同，比较姓即可
+        if (!this.surname.equals(o.surname)) {
             return this.surname.compareTo(o.surname);
-        } else //如果姓相同，比较名
+        } else {
             return this.firstName.compareTo(o.firstName);
+        }
     }
 
+    /**
+     * Purchases or cancels tickets for a show.
+     *
+     * @param name  the show name
+     * @param count the number of tickets (positive for purchase, negative for cancel)
+     * @throws IllegalStateException if purchase limits exceeded or insufficient tickets for cancel
+     */
     public void purchase(String name, int count) {
-        //不需要处理==0，因为在主函数处理了(catch)
-        if (!purchaseRecords.containsKey(name)) //首次购买该种
-        {
-            if (count < 0)//没有购买还取消了
-            {
+        if (!purchaseRecords.containsKey(name)) { // First time purchasing this show type
+            if (count < 0) { // Trying to cancel without existing purchase
                 throw new IllegalStateException("You have not purchased this type of ticket.");
             }
-            if (purchaseRecords.size() == 3) //限制购买种类
-                //throw new PurchaseLimitException();
+            if (purchaseRecords.size() == 3) { // Limit of 3 show types
                 throw new IllegalStateException("Purchase failed! You cannot buy more than 3 ticket types.\n" +
                         "Remove an existing type or add more of a type you already own.");
+            }
             purchaseRecords.put(name, count);
-        } else { //非首次购买该种
-            if (count < 0 && -count > purchaseRecords.get(name)) {//如果取消 且 超过已有数量
+        } else { // Already purchased this show type before
+            if (count < 0 && -count > purchaseRecords.get(name)) { // Cancel amount exceeds owned quantity
                 throw new IllegalStateException("You have not enough tickets.");
             }
-            //这一句，如果count设置为负数，也可以作为取消的操作
-            purchaseRecords.put(name, purchaseRecords.get(name) + count);//根据演出名查找hashmap对应数量，再做更新
+            // Update quantity (negative count works as cancellation)
+            purchaseRecords.put(name, purchaseRecords.get(name) + count);
         }
-
     }
-
 }
