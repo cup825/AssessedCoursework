@@ -209,7 +209,7 @@ public class PurchaseTicketPlatform {
     public void checkMember() {
         System.out.print("Please enter your full name(split by space)>");
         try {
-            String[] userName = input.nextLine().split(" ");
+            String[] userName = input.nextLine().trim().split("\\s+");
             currentMember = new Member(userName[0].trim(), userName[1].trim());
             if (findMember(currentMember) == null) {
                 throw new IllegalStateException("The member name is not exist! Please try again.");
