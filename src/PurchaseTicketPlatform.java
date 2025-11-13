@@ -192,13 +192,13 @@ public class PurchaseTicketPlatform {
     /**
      * Validates member name input and finds member in list.
      */
-    public void checkName() {
+    public void checkMember() {
         System.out.print("Please enter your full name(split by space)>");
         try {
             String[] userName = input.nextLine().split(" ");
             currentMember = new Member(userName[0].trim(), userName[1].trim());
             if (findMember(currentMember) == null) {
-                throw new IllegalStateException("Name is not exist!");
+                throw new IllegalStateException("The member name is not exist! Please try again.");
             } else {
                 currentMember = findMember(currentMember);
             }
@@ -212,7 +212,7 @@ public class PurchaseTicketPlatform {
      * Handles ticket purchase process including validation and updates.
      */
     public void buy() {
-        checkName(); // Validate member name
+        checkMember(); // Validate member name
 
         if (currentMember == null)
             return;
@@ -223,27 +223,9 @@ public class PurchaseTicketPlatform {
             System.out.print("Please enter the show name you want to buy >");
             String show = input.nextLine();
             currentTicket = new Ticket(show.trim());
-            if (findTicket(currentTicket) == null) { // Show doesn't exist - send letter
-                System.out.println("Purchase failed! Please check your letters.");
+            if (findTicket(currentTicket) == null) {
+                System.out.println("The show name is not exist! Please try again.");
                 displayShows();
-
-                try (PrintWriter outFile = new PrintWriter(new FileWriter("letters.txt", true))) {
-                    outFile.printf("""
-                            %s
-                            Dear %s,
-                            
-                            I’m sorry, but we couldn’t complete your ticket purchase.
-                            Unfortunately, '%s' is not an available ticket at NEAT.
-                            
-                            Please check shows' messages and try again.
-                            
-                            Kind regards,
-                            NEAT Ticket Office
-                            
-                            """, getTime(), currentMember.getName(), currentTicket.getName());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
             } else {
                 currentTicket = findTicket(currentTicket);
                 flag = false;
@@ -291,7 +273,7 @@ public class PurchaseTicketPlatform {
      * Handles ticket cancellation process including validation and updates.
      */
     public void cancel() {
-        checkName();
+        checkMember();
 
         if (currentMember == null)
             return;

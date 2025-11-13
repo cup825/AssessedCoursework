@@ -18,5 +18,7 @@ public class MainProgram {
     public static void main(String[] args) {
         PurchaseTicketPlatform platform = new PurchaseTicketPlatform();
         platform.run();
+
+        //Please open clerk.txt with a monospaced font (e.g., Consolas).
     }
 }
