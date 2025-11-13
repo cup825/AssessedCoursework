@@ -10,6 +10,7 @@ import java.util.Map;
  * @version 1.0
  * @see Ticket
  * @see SortedLinkedList
+ * @since 2025
  */
 public class Member implements Comparable<Member> {
     private final String firstName;

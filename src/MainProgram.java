@@ -5,7 +5,7 @@
  * and launching the main interface.</p>
  *
  * @author Ziyue Ren
- * @version 1.0.0
+ * @version 1.0
  * @see PurchaseTicketPlatform
  * @since 2025
  */

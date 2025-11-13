@@ -5,6 +5,7 @@
  *
  * @author Ziyue Ren
  * @version 1.0
+ * @since 2025
  */
 public class Ticket implements Comparable<Ticket> {
     private final String name;

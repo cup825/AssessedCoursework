@@ -9,6 +9,7 @@ import java.util.LinkedList;
  * @author Ziyue Ren
  * @version 1.0
  * @see LinkedList
+ * @since 2025
  */
 public class SortedLinkedList<E extends Comparable<? super E>> extends LinkedList<E> {
     /**
