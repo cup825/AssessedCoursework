@@ -5,19 +5,17 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Main platform class for the North East Arts Trust (NEAT) ticket purchase and management system.
+ * Main platform class for NEAT Ticket Purchase & Management System.
+ * <p>Core functions:
+ * 1.Loading members and tickets from input_data.txt on initialization;
+ * 2.Providing interactive menu (show list, member list, buy tickets, cancel tickets, exit);
+ * 3.Checking rules (member existence, ticket availability, max 3 ticket types per member);
+ * 4.Writing rejection letters to letters.txt for failed purchases;
+ * 5.Keeping member purchase records and ticket inventory consistent.
  *
- * <p>This class serves as the core business logic layer, responsible for:
- * 1. Loading member and ticket data from the input file (input_data.txt) during initialization;
- * 2. Providing interactive menu operations (show list, member list, ticket purchase, ticket cancellation, exit);
- * 3. Handling business rule validations (e.g., member existence check, ticket availability check, max 3 ticket types per member);
- * 4. Managing persistent output for failed purchases (writing rejection letters to letters.txt);
- * 5. Maintaining data consistency between member purchase records and ticket inventory.
- *
- * <p>Key dependencies: Uses {@link SortedLinkedList} to store members (sorted by surname + first name)
- * and tickets (sorted by show name) to ensure ordered data display; Relies on {@link NotEnoughTicketsException}
- * to handle insufficient ticket scenarios; Cooperates with {@link Member} and {@link Ticket} to manage
- * individual entity data.
+ * <p>Key dependencies: Uses {@link SortedLinkedList} to store sorted members (surname + first name)
+ * and tickets (show name); Relies on {@link NotEnoughTicketsException} for insufficient tickets;
+ * Works with {@link Member} and {@link Ticket} to manage entity data.
  *
  * @author Ziyue Ren
  * @version 1.0
