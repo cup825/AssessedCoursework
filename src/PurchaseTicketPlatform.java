@@ -266,6 +266,7 @@ public class PurchaseTicketPlatform {
             System.out.println("Purchase successfully!");
         } catch (InputMismatchException e) { // Invalid number input
             System.out.println("Please input valid number!");
+            input.nextLine();
         } catch (NotEnoughTicketsException e) { // Insufficient tickets - send letter
             System.out.println("Purchase failed! Please check your letters.");
             try (PrintWriter outFile = new PrintWriter(new FileWriter("letters.txt", true))) {
@@ -312,6 +313,7 @@ public class PurchaseTicketPlatform {
             System.out.println("Cancel successfully!");
         } catch (InputMismatchException e) { // Invalid number input
             System.out.println("Please input valid number!");
+            input.nextLine();
         } catch (NotEnoughTicketsException e) { // Insufficient tickets for cancellation
             System.out.println("Purchase failed! Please check your letters.");
         }
