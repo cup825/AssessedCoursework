@@ -82,7 +82,7 @@ public class Member implements Comparable<Member> {
                 i++;
             }
 
-            res.append(String.format("%-15s│%-40s %8.2f£", "", "Total cost: ", total)); // Add padding
+            res.append(String.format("%-15s│%-47s %8.2f£", "", "Total cost: ", total)); // Add padding
         }
 
         return res.toString();

@@ -217,7 +217,7 @@ public class PurchaseTicketPlatform {
                 currentMember = findMember(currentMember);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Input invalid format name!");
+            System.out.println("Invalid name format! Please enter: FirstName Surname");
             currentMember = null; // Reset to prevent using wrong object
         }
     }
