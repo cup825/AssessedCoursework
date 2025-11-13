@@ -5,15 +5,29 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Main platform class for ticket purchase and management system.
- * Handles member registration, ticket inventory, purchase operations, and cancellation.
+ * Main platform class for the North East Arts Trust (NEAT) ticket purchase and management system.
+ *
+ * <p>This class serves as the core business logic layer, responsible for:
+ * 1. Loading member and ticket data from the input file (input_data.txt) during initialization;
+ * 2. Providing interactive menu operations (show list, member list, ticket purchase, ticket cancellation, exit);
+ * 3. Handling business rule validations (e.g., member existence check, ticket availability check, max 3 ticket types per member);
+ * 4. Managing persistent output for failed purchases (writing rejection letters to letters.txt);
+ * 5. Maintaining data consistency between member purchase records and ticket inventory.
+ *
+ * <p>Key dependencies: Uses {@link SortedLinkedList} to store members (sorted by surname + first name)
+ * and tickets (sorted by show name) to ensure ordered data display; Relies on {@link NotEnoughTicketsException}
+ * to handle insufficient ticket scenarios; Cooperates with {@link Member} and {@link Ticket} to manage
+ * individual entity data.
  *
  * @author Ziyue Ren
  * @version 1.0
  * @see Member
  * @see Ticket
  * @see SortedLinkedList
+ * @see NotEnoughTicketsException
+ * @since 2024
  */
+
 public class PurchaseTicketPlatform {
     private final SortedLinkedList<Member> memberList = new SortedLinkedList<>(); // Member list
     private final SortedLinkedList<Ticket> ticketList = new SortedLinkedList<>(); // Show list
@@ -209,15 +223,9 @@ public class PurchaseTicketPlatform {
     }
 
     /**
-     * Handles ticket purchase process including validation and updates.
+     * Validates show name input and finds member in list.
      */
-    public void buy() {
-        checkMember(); // Validate member name
-
-        if (currentMember == null)
-            return;
-
-        // Validate show name exists
+    public void checkShow() {
         boolean flag = true;
         while (flag) {
             System.out.print("Please enter the show name you want to buy >");
@@ -231,6 +239,17 @@ public class PurchaseTicketPlatform {
                 flag = false;
             }
         }
+    }
+
+
+    /**
+     * Handles ticket purchase process including validation and updates.
+     */
+    public void buy() {
+        checkMember(); // Validate member name
+        if (currentMember == null)
+            return;
+        checkShow();  // Validate show name exists
 
         System.out.print("Please input the count of tickets you want to buy >");
         try {
@@ -273,25 +292,10 @@ public class PurchaseTicketPlatform {
      * Handles ticket cancellation process including validation and updates.
      */
     public void cancel() {
-        checkMember();
-
+        checkMember(); // Validate member name
         if (currentMember == null)
             return;
-
-        // Validate show name exists
-        boolean flag = true;
-        while (flag) {
-            System.out.print("Please enter the show name you want to cancel >");
-            String show = input.nextLine();
-            currentTicket = new Ticket(show.trim());
-            if (findTicket(currentTicket) == null) { // Show doesn't exist
-                System.out.println("Please enter right show name!");
-                displayMembers();
-            } else {
-                currentTicket = findTicket(currentTicket);
-                flag = false;
-            }
-        }
+        checkShow();// Validate show name exists
 
         System.out.print("Please input the count of tickets you want to cancel >");
         try {
