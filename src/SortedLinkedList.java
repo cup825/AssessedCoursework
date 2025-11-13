@@ -16,7 +16,7 @@ public class SortedLinkedList<E extends Comparable<? super E>> extends LinkedLis
      * Adds an element while maintaining sorted order.
      *
      * @param e the element to add
-     * @return true (as specified by Collection.add)
+     * @return true (as specified by Collection.Add)
      */
     @Override
     public boolean add(E e) {
