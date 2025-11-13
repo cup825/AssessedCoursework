@@ -25,7 +25,7 @@ import java.util.Scanner;
  * @see Ticket
  * @see SortedLinkedList
  * @see NotEnoughTicketsException
- * @since 2024
+ * @since 2025
  */
 
 public class PurchaseTicketPlatform {

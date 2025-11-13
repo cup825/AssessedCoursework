@@ -7,7 +7,7 @@
  * @author Ziyue Ren
  * @version 1.0.0
  * @see PurchaseTicketPlatform
- * @since 2024
+ * @since 2025
  */
 public class MainProgram {
     /**
