@@ -86,12 +86,6 @@ public class PurchaseTicketPlatform {
      * Main program loop handling user interactions.
      */
     public void run() {
-        try (PrintWriter clearFile = new PrintWriter("letters.txt")) {
-            clearFile.print(""); // Clear file content
-        } catch (FileNotFoundException e) {
-            System.out.println("Cannot clear letters.txt");
-        }
-
         loadList();
         boolean flag = true;
         while (flag) try {
@@ -304,11 +298,11 @@ public class PurchaseTicketPlatform {
                 System.out.println("Please enter a positive number!");
                 return;
             }
-            // Update ticket inventory (positive count)
-            currentTicket.updateCount(purchaseCount);
             // Update member's purchase records (negative count)
             currentMember.purchase(currentTicket.getName(), -purchaseCount);
             System.out.println("Cancel successfully!");
+            // Update ticket inventory (positive count)
+            currentTicket.updateCount(purchaseCount);//If update successfully, update ticket count
         } catch (InputMismatchException e) { // Invalid number input
             System.out.println("Please input valid number!");
             input.nextLine();
