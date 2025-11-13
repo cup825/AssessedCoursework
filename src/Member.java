@@ -83,7 +83,7 @@ public class Member implements Comparable<Member> {
                 i++;
             }
 
-            res.append(String.format("%-15s│%-47s %8.2f£", "", "Total cost: ", total)); // Add padding
+            res.append(String.format("%-15s│%-40s %8.2f£", "", "Total cost: ", total)); // Add padding
         }
 
         return res.toString();
@@ -126,7 +126,12 @@ public class Member implements Comparable<Member> {
                 throw new IllegalStateException("You have not enough tickets.");
             }
             // Update quantity (negative count works as cancellation)
-            purchaseRecords.put(name, purchaseRecords.get(name) + count);
+            int i = purchaseRecords.get(name) + count;
+            if (i <= 0) {
+                purchaseRecords.remove(name); // remove from records when count == 0
+            } else {
+                purchaseRecords.put(name, i);
+            }
         }
     }
 }

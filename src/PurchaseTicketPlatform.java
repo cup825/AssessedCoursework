@@ -228,7 +228,7 @@ public class PurchaseTicketPlatform {
     public void checkShow() {
         boolean flag = true;
         while (flag) {
-            System.out.print("Please enter the show name you want to buy >");
+            System.out.print("Please enter the show name >");
             String show = input.nextLine();
             currentTicket = new Ticket(show.trim());
             if (findTicket(currentTicket) == null) {
